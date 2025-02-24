@@ -1,18 +1,11 @@
 "use client";
 
 import { Button, Input } from "@/components";
+import { useTaskStore } from "@/store";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { randomUUID } from "crypto";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-
-type Task = {
-  id: number;
-  title: string;
-  description: string;
-  completed: boolean;
-  createdAt: Date;
-  duration: number;
-};
 
 const formSchema = z.object({
   title: z.string().min(1, "Title is required"),
@@ -20,7 +13,11 @@ const formSchema = z.object({
   duration: z.coerce.number().min(1, "Duration is required"),
 });
 
-const Form = () => {
+type FormProps = {
+  onSubmit: (data: z.infer<typeof formSchema>) => void;
+} & Omit<React.FormHTMLAttributes<HTMLFormElement>, "onSubmit">;
+
+const Form = (props: FormProps) => {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -31,7 +28,7 @@ const Form = () => {
   });
 
   function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log(values);
+    props.onSubmit(values);
   }
 
   function getFieldError(fieldName: keyof typeof formSchema.shape) {
@@ -40,7 +37,12 @@ const Form = () => {
   }
 
   return (
-    <form noValidate id="task-form" onSubmit={form.handleSubmit(onSubmit)}>
+    <form
+      {...props}
+      noValidate
+      id="task-form"
+      onSubmit={form.handleSubmit(onSubmit)}
+    >
       <Input
         {...form.register("title")}
         error={getFieldError("title")}
@@ -64,9 +66,22 @@ const Form = () => {
 };
 
 export default function Home() {
+  const { tasks, addTask, idIncrementor } = useTaskStore();
+  
+  const onSubmitTask = (data: z.infer<typeof formSchema>) => {
+    addTask({
+      id: idIncrementor,
+      title: data.title,
+      description: data.description,
+      duration: data.duration,
+      completed: false,
+      createdAt: new Date(),
+    });
+  };
+
   return (
     <div className="flex flex-row items-center justify-center font-[family-name:var(--font-geist-sans)]">
-      <Form />
+      <Form onSubmit={onSubmitTask} />
     </div>
   );
 }
