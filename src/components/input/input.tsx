@@ -5,7 +5,6 @@ type Props = React.InputHTMLAttributes<HTMLInputElement> & {
 };
 
 function Input({ label, error, ...props }: Props) {
-  console.log(error);
   return (
     <div className="flex flex-col justify-start items-center gap-2">
       <label htmlFor={props.name}>{label}</label>
