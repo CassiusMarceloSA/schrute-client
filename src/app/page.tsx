@@ -3,7 +3,6 @@
 import { Button, Input } from "@/components";
 import { useTaskStore } from "@/store";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { randomUUID } from "crypto";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
@@ -66,8 +65,8 @@ const Form = (props: FormProps) => {
 };
 
 export default function Home() {
-  const { tasks, addTask, idIncrementor } = useTaskStore();
-  
+  const { addTask, idIncrementor } = useTaskStore();
+
   const onSubmitTask = (data: z.infer<typeof formSchema>) => {
     addTask({
       id: idIncrementor,
