@@ -15,14 +15,13 @@ type Props = {
   title: string;
   description: string;
   buttonText: string;
-  onConfirmText: string;
-  onConfirm: () => void;
-  onCancelText: string;
+  open: boolean;
+  updateOpen: (open: boolean) => void;
 };
 
 export function Modal(props: Props) {
   return (
-    <Dialog>
+    <Dialog onOpenChange={props.updateOpen} open={props.open}>
       <DialogTrigger asChild>
         <Button variant="outline">{props.buttonText}</Button>
       </DialogTrigger>
@@ -32,19 +31,9 @@ export function Modal(props: Props) {
           <DialogDescription>{props.description}</DialogDescription>
         </DialogHeader>
         {props.children}
-        <DialogFooter className="sm:justify-between">
-          <DialogClose asChild>
-            <Button type="button" variant="ghost">
-              {props.onCancelText}
-            </Button>
-          </DialogClose>
-          <DialogClose asChild>
-            <Button type="button" onClick={props.onConfirm}>
-              {props.onConfirmText}
-            </Button>
-          </DialogClose>
-        </DialogFooter>
       </DialogContent>
     </Dialog>
   );
 }
+
+export { DialogClose , DialogFooter };

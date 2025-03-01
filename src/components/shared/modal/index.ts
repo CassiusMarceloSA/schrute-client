@@ -1,1 +1,5 @@
-export { Modal } from "./modal";
+export {
+  Modal as Content,
+  DialogClose as Close,
+  DialogFooter as Footer,
+} from "./modal";
