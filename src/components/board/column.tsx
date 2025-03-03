@@ -2,6 +2,7 @@ import { type Task as TaskType } from "@/store/task.store";
 import { JSX } from "react";
 import { Draggable, Droppable, DroppableProps } from "react-beautiful-dnd";
 import { Task } from ".";
+import { getItemStyle, getListStyle } from "./utils";
 
 type Props = {
   title: string;
@@ -14,13 +15,17 @@ export function Column({ title, ...props }: Props) {
       <h3>{title}</h3>
       <Droppable
         isDropDisabled={false}
-        isCombineEnabled={false}
+        isCombineEnabled={true}
         ignoreContainerClipping={false}
         direction="vertical"
         {...props}
       >
-        {(provided) => (
-          <div ref={provided.innerRef} {...provided.droppableProps}>
+        {(provided, snapshot) => (
+          <div
+            ref={provided.innerRef}
+            style={getListStyle(snapshot.isDraggingOver)}
+            {...provided.droppableProps}
+          >
             {props.tasks.map((task, index) => (
               <Task
                 item={task}

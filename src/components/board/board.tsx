@@ -17,7 +17,6 @@ type Props = {
 
 export function Board(props: Props) {
   const [state, setState] = useState(props.columns);
-  console.log(state)
 
   const onDragEnd: OnDragEndResponder = (result) => {
     const { source, destination } = result;
@@ -34,10 +33,16 @@ export function Board(props: Props) {
       newState[sInd].tasks = items as TaskType[];
       setState(newState);
     } else {
-      const result = move(state[sInd], state[dInd], source, destination);
+      const result = move(
+        state[sInd].tasks,
+        state[dInd].tasks,
+        source,
+        destination
+      );
       const newState = [...state];
-      newState[sInd] = result[sInd];
-      newState[dInd] = result[dInd];
+      console.log(result);
+      newState[sInd].tasks = result[sInd];
+      newState[dInd].tasks = result[dInd];
 
       setState(newState);
     }
@@ -50,40 +55,9 @@ export function Board(props: Props) {
           droppableId={index.toString()}
           title={column.title}
           tasks={column.tasks}
+          key={index}
         />
       ))}
     </Container>
   );
-}
-
-{
-  /* <Droppable
-droppableId={index}
-isDropDisabled={false}
-isCombineEnabled={false}
-ignoreContainerClipping={false}
-direction="vertical"
->
-{(provided) => (
-  <div ref={provided.innerRef} {...provided.droppableProps}>
-    {state.map((item, index) => (
-      <Draggable
-        draggableId={item.id.toString()}
-        index={index}
-        key={item.id}
-      >
-        {(provided) => (
-          <div
-            ref={provided.innerRef}
-            {...provided.draggableProps}
-            {...provided.dragHandleProps}
-          >
-            {item.title}
-          </div>
-        )}
-      </Draggable>
-    ))}
-  </div>
-)}
-</Droppable> */
 }
