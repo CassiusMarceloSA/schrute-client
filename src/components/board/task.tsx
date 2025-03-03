@@ -1,28 +1,27 @@
-import { Task } from "@/store/task.store";
-import { Draggable, DraggableProps } from "react-beautiful-dnd";
-import { getItemStyle } from "./utils";
+import { Task as TaskType } from "@/store/task.store";
+import DropIndicator from "./drop-indicator";
 
-type Props = Omit<DraggableProps, "children"> & {
-  item: Task;
-  // children?: React.ReactElement;
+type Props = {
+  item: Partial<TaskType> & { column: string };
+  handleDragStart: (
+    e: any,
+    item: Partial<TaskType> & { column: string }
+  ) => void;
 };
 
-export function Task({ ...props }: Props) {
+const Card = (props: Props) => {
   return (
-    <Draggable key={props.item.id} {...props}>
-      {(provided, snapshot) => (
-        <div
-          ref={provided.innerRef}
-          style={getItemStyle(
-            snapshot.isDragging,
-            provided.draggableProps.style
-          )}
-          {...provided.draggableProps}
-          {...provided.dragHandleProps}
-        >
-          {props.item.title}
-        </div>
-      )}
-    </Draggable>
+    <>
+      <DropIndicator beforeId={props.item?.id} column={props.item?.column} />
+      <div
+        draggable
+        onDragStart={(e) => props.handleDragStart(e, props?.item)}
+        className="cursor-grab rounder border border-neutral-700 bg-neutral-800 p-3 active:cursor-grabbing"
+      >
+        <p className="text-sm text-neutral-100">{props.item?.title}</p>
+      </div>
+    </>
   );
-}
+};
+
+export default Card;
