@@ -40,7 +40,6 @@ export function Board(props: Props) {
         destination
       );
       const newState = [...state];
-      console.log(result);
       newState[sInd].tasks = result[sInd];
       newState[dInd].tasks = result[dInd];
 
