@@ -122,6 +122,10 @@ const Column = ({
     }
   };
 
+  const addNewCard = (card: TaskType) => {
+    setCards([...cards, card]);
+  };
+
   return (
     <div className="w-56 shrink-0">
       <div className="mb-3 flex items-center justify-between">
@@ -138,7 +142,7 @@ const Column = ({
           active ? "bg-neutral-800/50" : "bg-neutral-800/0"
         }`}
       >
-        <AddCard column={column} setCards={setCards} />
+        <AddCard column={column} setCards={addNewCard} />
         {filteredCards.map((card) => (
           <Task key={card.id} item={card} handleDragStart={handleDragStart} />
         ))}

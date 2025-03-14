@@ -1,29 +1,33 @@
+import { ColumnEnum, Task } from "@/models";
 import { Plus } from "lucide-react";
 import { useState } from "react";
 
-const AddCard = (props: any) => {
+type Props = {
+  column: ColumnEnum;
+  setCards: (args: Task) => void;
+};
+
+const AddCard = (props: Props) => {
   const [text, setText] = useState("");
   const [adding, setAdding] = useState(false);
 
-  const handleSubmit = (e: any) => {
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!text.trim().length) return;
 
-    const card = {
-      id: Math.random().toString(),
-      title: text,
-      column: props.column,
-    };
     const newCard = {
-      id: Date.now(),
+      id: Date.now().toString(),
       title: text,
-      column: props.column,
-    };
-    props.setCards((prev: any) => [...prev, newCard]);
+      status: props.column,
+      completed: false,
+      description: "",
+      createdAt: new Date(),
+      duration: 30,
+    } satisfies Task;
+
+    props.setCards(newCard);
     setAdding(false);
     setText("");
-
-    props.setCards((prev: any) => [card, ...prev]);
   };
 
   return (
