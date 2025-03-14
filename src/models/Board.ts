@@ -1,5 +1,5 @@
-import { Column } from ".";
+import { Column, ColumnEnum } from ".";
 
 export type Board = { 
-    columns: Column[];
+    columns: Record<ColumnEnum, Column>;
 }
