@@ -1,7 +1,7 @@
 import { ColumnEnum } from ".";
 
 export type Task = { 
-    id: number;
+    id: string;
     title: string;
     description: string;
     duration: number;

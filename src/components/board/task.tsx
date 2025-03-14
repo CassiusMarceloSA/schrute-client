@@ -1,18 +1,15 @@
-import { Task as TaskType } from "@/store/task.store";
+import { Task as TaskType } from "@/models";
 import DropIndicator from "./drop-indicator";
 
 type Props = {
-  item: Partial<TaskType> & { column: string };
-  handleDragStart: (
-    e: any,
-    item: Partial<TaskType> & { column: string }
-  ) => void;
+  item: TaskType;
+  handleDragStart: (e: React.DragEvent<HTMLDivElement>, item: TaskType) => void;
 };
 
 const Card = (props: Props) => {
   return (
     <>
-      <DropIndicator beforeId={props.item?.id} column={props.item?.column} />
+      <DropIndicator beforeId={props.item?.id} column={props.item?.status} />
       <div
         draggable
         onDragStart={(e) => props.handleDragStart(e, props?.item)}
