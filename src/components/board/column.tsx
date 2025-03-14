@@ -2,13 +2,17 @@ import { useState } from "react";
 import AddCard from "./add-task-button";
 import Task from "./task";
 import DropIndicator from "./drop-indicator";
+import { TwTextColor } from "@/utils";
+import { ColumnEnum, Task as TaskType } from "@/models";
+
+type DragEvent = React.DragEvent<HTMLDivElement>;
 
 type ColumnProps = {
   title: string;
-  headingColor: string;
-  column: any;
-  cards: any;
-  setCards: (args: any) => void;
+  headingColor: TwTextColor;
+  column: ColumnEnum;
+  cards: TaskType[];
+  setCards: (args: TaskType[]) => void;
 };
 
 const Column = ({
@@ -20,20 +24,20 @@ const Column = ({
 }: ColumnProps) => {
   const [active, setActive] = useState(false);
   const [draggingCardColumn, setDraggingCardColumn] = useState("");
-  const filteredCards = cards.filter((card: any) => card.column === column);
+  const filteredCards = cards.filter((card) => card.status === column);
 
-  const handleDragStart = (e: any, card: any) => {
+  const handleDragStart = (e: DragEvent, card: TaskType) => {
     e.dataTransfer.setData("cardId", card.id);
-    setDraggingCardColumn(card.column);
+    setDraggingCardColumn(card.status);
   };
 
-  const handleDragOver = (e: any) => {
+  const handleDragOver = (e: DragEvent) => {
     e.preventDefault();
     highlightIndicator(e);
     setActive(true);
   };
 
-  const highlightIndicator = (e: any) => {
+  const highlightIndicator = (e: DragEvent) => {
     const indicators = getIndicators();
     clearHighlights(indicators);
     const el = getNearestIndicator(e, indicators);
@@ -43,10 +47,10 @@ const Column = ({
     }
   };
 
-  const clearHighlights = (els?: any) => {
+  const clearHighlights = (els?: HTMLElement[]) => {
     const indicators = els || getIndicators();
 
-    indicators.forEach((i: any) => {
+    indicators.forEach((i) => {
       i.style.opacity = "0";
     });
   };
@@ -55,13 +59,16 @@ const Column = ({
     const indicators = Array.from(
       document.querySelectorAll(`[data-column="${column}"]`)
     );
-    return indicators;
+    return indicators as HTMLElement[];
   };
 
-  const getNearestIndicator = (e: any, indicators: Element[]) => {
+  const getNearestIndicator = (
+    e: React.DragEvent<HTMLDivElement>,
+    indicators: HTMLElement[]
+  ) => {
     const DISTANCE_OFFSET = 50;
     const el = indicators.reduce(
-      (closest: any, child: Element) => {
+      (closest, child: HTMLElement) => {
         const box = child.getBoundingClientRect();
         const offset = e.clientY - (box.top + DISTANCE_OFFSET);
         if (offset < 0 && offset > closest.offset) {
@@ -83,7 +90,7 @@ const Column = ({
     clearHighlights();
   };
 
-  const handleDragEnd = (e: any) => {
+  const handleDragEnd = (e: DragEvent) => {
     setActive(false);
     clearHighlights();
 
@@ -95,18 +102,18 @@ const Column = ({
 
     if (before !== cardId) {
       let copy = [...cards];
-      let cardToTransfer = copy.find((card: any) => card.id === cardId);
+      let cardToTransfer = copy.find((card) => card.id === cardId);
 
       if (!cardToTransfer) return;
 
-      cardToTransfer = { ...cardToTransfer, column };
-      copy = copy.filter((card: any) => card.id !== cardId);
+      cardToTransfer = { ...cardToTransfer, status: column };
+      copy = copy.filter((card) => card.id !== cardId);
       const moveToBack = before === "-1";
 
       if (moveToBack) {
         copy.push(cardToTransfer);
       } else {
-        const index = copy.findIndex((card: any) => card.id === before);
+        const index = copy.findIndex((card) => card.id === before);
         if (index === undefined) return;
         copy.splice(index, 0, cardToTransfer);
       }
@@ -132,7 +139,7 @@ const Column = ({
         }`}
       >
         <AddCard column={column} setCards={setCards} />
-        {filteredCards.map((card: any) => (
+        {filteredCards.map((card) => (
           <Task key={card.id} item={card} handleDragStart={handleDragStart} />
         ))}
         <DropIndicator beforeId="-1" column={column} />
