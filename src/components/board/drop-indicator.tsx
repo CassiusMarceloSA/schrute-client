@@ -1,4 +1,11 @@
-const DropIndicator = (props: any) => {
+import { ColumnEnum } from "@/models";
+
+type Props = {
+  beforeId: string;
+  column: ColumnEnum;
+};
+
+const DropIndicator = (props: Props) => {
   return (
     <div
       data-before={props.beforeId || "-1"}
