@@ -1,4 +1,4 @@
 export { BoardContainer as Container } from "./container";
-export { Column } from "./column";
-export { Task } from "./task";
-export { type BoardColumn, Board } from "./board";
+export { default as Column } from "./column";
+export { default as Task } from "./task";
+export { type BoardColumn, default as Board } from "./board";

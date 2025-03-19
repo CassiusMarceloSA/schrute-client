@@ -1,1 +1,1 @@
-export { default as useTaskStore } from "./task.store";
+export { default as useBoardStore } from "./board.store";

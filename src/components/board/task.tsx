@@ -1,28 +1,31 @@
-import { Task } from "@/store/task.store";
-import { Draggable, DraggableProps } from "react-beautiful-dnd";
-import { getItemStyle } from "./utils";
+import { Task as TaskType } from "@/models";
+import DropIndicator from "./drop-indicator";
+import { useState } from "react";
 
-type Props = Omit<DraggableProps, "children"> & {
-  item: Task;
-  // children?: React.ReactElement;
+type Props = {
+  item: TaskType;
+  handleDragStart: (e: React.DragEvent<HTMLDivElement>, item: TaskType) => void;
 };
 
-export function Task({ ...props }: Props) {
+const Card = (props: Props) => {
+  const [dragging, setDragging] = useState(false);
+  const bg = !dragging ? "bg-neutral-800" : "bg-yellow-800";
   return (
-    <Draggable key={props.item.id} {...props}>
-      {(provided, snapshot) => (
-        <div
-          ref={provided.innerRef}
-          style={getItemStyle(
-            snapshot.isDragging,
-            provided.draggableProps.style
-          )}
-          {...provided.draggableProps}
-          {...provided.dragHandleProps}
-        >
-          {props.item.title}
-        </div>
-      )}
-    </Draggable>
+    <>
+      <DropIndicator beforeId={props.item?.id} column={props.item?.status} />
+      <div
+        draggable
+        onDragStart={(e) => {
+          props.handleDragStart(e, props?.item);
+          setDragging(true);
+        }}
+        onDragEnd={() => setDragging(false)}
+        className={`cursor-grab rounder border border-neutral-700 p-3 active:cursor-grabbing my-1 ${bg}`}
+      >
+        <p className="text-sm text-neutral-100">{props.item?.title}</p>
+      </div>
+    </>
   );
-}
+};
+
+export default Card;
