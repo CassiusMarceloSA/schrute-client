@@ -3,7 +3,7 @@ import AddCard from "./add-task-button";
 import Task from "./task";
 import DropIndicator from "./drop-indicator";
 import { TwTextColor } from "@/utils";
-import { Column, ColumnEnum, Task as TaskType } from "@/models";
+import { Column as ColumnType, ColumnEnum, Task as TaskType } from "@/models";
 import { getIndicators, getNearestIndicator, reorder } from "./utils";
 import { useBoardStore } from "@/store";
 
@@ -14,7 +14,7 @@ type ColumnProps = {
   headingColor: TwTextColor;
   column: ColumnEnum;
   cards: TaskType[];
-  setColumn: (columnId: ColumnEnum, column: Column) => void;
+  setColumn: (columnId: ColumnEnum, column: ColumnType) => void;
 };
 
 const Column = ({
@@ -38,7 +38,7 @@ const Column = ({
     const newColumn = {
       id: column,
       tasks: cards,
-    } satisfies Column;
+    } satisfies ColumnType;
     setColumn(column, newColumn);
   };
 
