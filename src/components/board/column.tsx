@@ -3,7 +3,9 @@ import AddCard from "./add-task-button";
 import Task from "./task";
 import DropIndicator from "./drop-indicator";
 import { TwTextColor } from "@/utils";
-import { ColumnEnum, Task as TaskType } from "@/models";
+import { Column, ColumnEnum, Task as TaskType } from "@/models";
+import { getIndicators, getNearestIndicator, reorder } from "./utils";
+import { useBoardStore } from "@/store";
 
 type DragEvent = React.DragEvent<HTMLDivElement>;
 
@@ -12,127 +14,95 @@ type ColumnProps = {
   headingColor: TwTextColor;
   column: ColumnEnum;
   cards: TaskType[];
-  setCards: (args: TaskType[]) => void;
+  setColumn: (columnId: ColumnEnum, column: Column) => void;
 };
 
 const Column = ({
   cards,
   column,
   headingColor,
-  setCards,
+  setColumn,
   title,
 }: ColumnProps) => {
   const [active, setActive] = useState(false);
-  const [draggingCardColumn, setDraggingCardColumn] = useState("");
-  const filteredCards = cards.filter((card) => card.status === column);
+  const [movingCard, setMovingCard] = useState<TaskType | null>(null);
+  const { board } = useBoardStore();
+  const allItems = Object.values(board.columns).reduce<TaskType[]>(
+    (acc, item) => {
+      return [...acc, ...item.tasks];
+    },
+    []
+  );
+  console.log(allItems);
+  const updateColumn = (cards: TaskType[]) => {
+    const newColumn = {
+      id: column,
+      tasks: cards,
+    } satisfies Column;
+    setColumn(column, newColumn);
+  };
+
+  const updateCardStatus = (card: TaskType, list: TaskType[]) => {
+    card.status = column;
+    const copy = list.filter((item) => item.id !== card.id);
+    copy.push(card);
+    return copy;
+  };
 
   const handleDragStart = (e: DragEvent, card: TaskType) => {
+    console.log(card);
     e.dataTransfer.setData("cardId", card.id);
-    setDraggingCardColumn(card.status);
+    setMovingCard(card);
   };
 
   const handleDragOver = (e: DragEvent) => {
     e.preventDefault();
-    highlightIndicator(e);
     setActive(true);
-  };
-
-  const highlightIndicator = (e: DragEvent) => {
-    const indicators = getIndicators();
-    clearHighlights(indicators);
-    const el = getNearestIndicator(e, indicators);
-
-    if (draggingCardColumn === column) {
-      el.element.style.opacity = "1";
-    }
-  };
-
-  const clearHighlights = (els?: HTMLElement[]) => {
-    const indicators = els || getIndicators();
-
-    indicators.forEach((i) => {
-      i.style.opacity = "0";
-    });
-  };
-
-  const getIndicators = () => {
-    const indicators = Array.from(
-      document.querySelectorAll(`[data-column="${column}"]`)
-    );
-    return indicators as HTMLElement[];
-  };
-
-  const getNearestIndicator = (
-    e: React.DragEvent<HTMLDivElement>,
-    indicators: HTMLElement[]
-  ) => {
-    const DISTANCE_OFFSET = 50;
-    const el = indicators.reduce(
-      (closest, child: HTMLElement) => {
-        const box = child.getBoundingClientRect();
-        const offset = e.clientY - (box.top + DISTANCE_OFFSET);
-        if (offset < 0 && offset > closest.offset) {
-          return { offset, element: child };
-        }
-
-        return closest;
-      },
-      {
-        offset: Number.NEGATIVE_INFINITY,
-        element: indicators[indicators.length - 1],
-      }
-    );
-    return el;
   };
 
   const handleDragLeave = () => {
     setActive(false);
-    clearHighlights();
   };
 
   const handleDragEnd = (e: DragEvent) => {
     setActive(false);
-    clearHighlights();
-
-    const cardId = e.dataTransfer.getData("cardId");
-
-    const indicators = getIndicators();
+    const cardId = movingCard?.id || e.dataTransfer.getData("cardId");
+    console.log(cardId);
+    const indicators = getIndicators(column);
     const { element: el } = getNearestIndicator(e, indicators);
     const before = el.dataset.before || "-1";
-
-    if (before !== cardId) {
-      let copy = [...cards];
-      let cardToTransfer = copy.find((card) => card.id === cardId);
-
-      if (!cardToTransfer) return;
-
-      cardToTransfer = { ...cardToTransfer, status: column };
-      copy = copy.filter((card) => card.id !== cardId);
-      const moveToBack = before === "-1";
-
-      if (moveToBack) {
-        copy.push(cardToTransfer);
-      } else {
-        const index = copy.findIndex((card) => card.id === before);
-        if (index === undefined) return;
-        copy.splice(index, 0, cardToTransfer);
-      }
-
-      setCards(copy);
+    if (before === cardId) {
+      return;
     }
+
+    let copy = [...cards];
+    let cardToTransfer = allItems.find((card) => card.id === cardId);
+    copy.forEach((item) => console.log(item.id, cardId));
+    console.log(cardToTransfer);
+    if (!cardToTransfer) return;
+
+    const isDifferentColumn = !movingCard && cardId;
+    if (isDifferentColumn) {
+      copy = updateCardStatus(cardToTransfer, copy);
+      setMovingCard(null);
+      updateColumn(copy);
+      return;
+    }
+
+    copy = reorder(copy, cardToTransfer, before);
+    setMovingCard(null);
+    updateColumn(copy);
   };
 
   const addNewCard = (card: TaskType) => {
-    setCards([...cards, card]);
+    updateColumn([...cards, card]);
   };
 
   return (
     <div className="w-56 shrink-0">
       <div className="mb-3 flex items-center justify-between">
         <h3 className={`font-medium ${headingColor}`}>{title}</h3>
-        <span className="rounded text-sm text-neutral-400">
-          {filteredCards.length}
-        </span>
+        <span className="rounded text-sm text-neutral-400">{cards.length}</span>
       </div>
       <div
         onDragOver={handleDragOver}
@@ -143,10 +113,10 @@ const Column = ({
         }`}
       >
         <AddCard column={column} setCards={addNewCard} />
-        {filteredCards.map((card) => (
+        {cards.map((card) => (
           <Task key={card.id} item={card} handleDragStart={handleDragStart} />
         ))}
-        <DropIndicator beforeId="-1" column={column} />
+        <DropIndicator fullHeight beforeId="-1" column={column} />
       </div>
     </div>
   );
