@@ -76,7 +76,7 @@ const Column = ({
     }
 
     let copy = [...cards];
-    let cardToTransfer = allItems.find((card) => card.id === cardId);
+    const cardToTransfer = allItems.find((card) => card.id === cardId);
     copy.forEach((item) => console.log(item.id, cardId));
     console.log(cardToTransfer);
     if (!cardToTransfer) return;

@@ -1,7 +1,5 @@
 import { Column } from ".";
-import { useState } from "react";
 // import { Board as BoardType, Task as TaskType } from "@/models";
-import { INITIAL_STATE } from "@/store/board.store";
 import { useBoardStore } from "@/store";
 import { TwTextColor } from "@/utils";
 
