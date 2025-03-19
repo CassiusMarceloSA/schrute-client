@@ -4,7 +4,7 @@ import { TaskForm, formSchema } from "./task-form";
 import { useState } from "react";
 
 type Props = {
-  onSubmit: (args: any) => Promise<void> | void;
+  onSubmit: (args: z.infer<typeof formSchema>) => Promise<void> | void;
   closeAfterSubmit?: boolean;
 };
 
