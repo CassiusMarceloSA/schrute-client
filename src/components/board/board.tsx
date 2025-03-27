@@ -1,4 +1,4 @@
-import { Board, ColumnEnum } from "@/models";
+import { ColumnEnum } from "@/models";
 import { taskService } from "@/services";
 import { useBoardStore } from "@/store";
 import { TW_BOARD_COLORS } from "@/utils";
@@ -14,10 +14,10 @@ const Board = () => {
     setBoard(tasks);
   }, [setBoard]);
 
-  const updateTask = async (id: string, status: ColumnEnum) => { 
+  const updateTask = async (id: string, status: ColumnEnum) => {
     await taskService.updateTaskStatus(id, status);
     fetchTasks();
-  }
+  };
 
   useEffect(() => {
     fetchTasks();
