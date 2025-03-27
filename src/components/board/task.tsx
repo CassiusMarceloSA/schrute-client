@@ -1,6 +1,7 @@
 import { Task as TaskType } from "@/models";
 import DropIndicator from "./drop-indicator";
 import { useState } from "react";
+import { TwBackgroundColor } from "@/utils";
 
 type Props = {
   item: TaskType;
@@ -9,7 +10,8 @@ type Props = {
 
 const Card = (props: Props) => {
   const [dragging, setDragging] = useState(false);
-  const bg = !dragging ? "bg-neutral-800" : "bg-yellow-800";
+  const bg = !dragging ? "bg-neutral-800" : "bg-purple-950";
+  const border = !dragging ? "border-neutral-700" : "border-purple-800";
   return (
     <>
       <DropIndicator beforeId={props.item?.id} column={props.item?.status} />
@@ -20,9 +22,10 @@ const Card = (props: Props) => {
           setDragging(true);
         }}
         onDragEnd={() => setDragging(false)}
-        className={`cursor-grab rounder border border-neutral-700 p-3 active:cursor-grabbing my-1 ${bg}`}
+        className={`cursor-grab rounder border overflow-hidden p-3 active:cursor-grabbing my-1 ${border} ${bg}`}
       >
-        <p className="text-sm text-neutral-100">{props.item?.title}</p>
+        <p className="text-sm text-neutral-100 my-2">{props.item?.title}</p>
+        <p className="text-xs text-neutral-400">{props.item?.description}</p>
       </div>
     </>
   );
