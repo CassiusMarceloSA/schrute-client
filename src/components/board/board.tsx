@@ -11,7 +11,7 @@ const Board = () => {
   const columns = Object.values(board.columns);
 
   const fetchTasks = useCallback(async () => {
-    console.log('rerendered')
+
     const { tasks } = await taskService.getTasks();
     setBoard(tasks);
   }, [setBoard]);
