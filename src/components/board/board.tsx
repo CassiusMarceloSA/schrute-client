@@ -1,20 +1,23 @@
-import { Board } from "@/models";
+import { Board, ColumnEnum } from "@/models";
 import { taskService } from "@/services";
 import { useBoardStore } from "@/store";
 import { TW_BOARD_COLORS } from "@/utils";
 import { useCallback, useEffect } from "react";
 import { Column } from ".";
 
-
 const Board = () => {
   const { board, setColumn, setBoard } = useBoardStore();
   const columns = Object.values(board.columns);
 
   const fetchTasks = useCallback(async () => {
-
     const { tasks } = await taskService.getTasks();
     setBoard(tasks);
   }, [setBoard]);
+
+  const updateTask = async (id: string, status: ColumnEnum) => { 
+    await taskService.updateTaskStatus(id, status);
+    fetchTasks();
+  }
 
   useEffect(() => {
     fetchTasks();
@@ -31,6 +34,7 @@ const Board = () => {
             color={TW_BOARD_COLORS[index]}
             cards={item.tasks}
             setColumn={setColumn}
+            updateCardStatus={updateTask}
           />
         ))}
       </div>
