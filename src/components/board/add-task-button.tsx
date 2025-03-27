@@ -5,6 +5,7 @@ import { useState } from "react";
 type Props = {
   column: ColumnEnum;
   setCards: (args: Task) => void;
+  className?: string;
 };
 
 const AddCard = (props: Props) => {
@@ -32,7 +33,7 @@ const AddCard = (props: Props) => {
   return (
     <>
       {adding ? (
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit} className={props.className}>
           <textarea
             onChange={(e) => setText(e.target.value)}
             autoFocus
@@ -59,10 +60,10 @@ const AddCard = (props: Props) => {
       ) : (
         <button
           onClick={() => setAdding(true)}
-          className="flex w-full items-center gap-1.5 px-3 py-1.5 text-xs text-neutral-400 transition-colors hover:text-neutral-50"
+          className="border my-1.5 w-full rounded-sm bg-neutral-800 border-neutral-700 py-2 px-4 gap-1 flex items-center justify-center text-xs text-purple-400 font-medium transition-colors hover:text-purple-300"
         >
-          <span>Add Card</span>
-          <Plus size={14} />
+          <Plus size={12} />
+          <span>Add new task</span>
         </button>
       )}
     </>

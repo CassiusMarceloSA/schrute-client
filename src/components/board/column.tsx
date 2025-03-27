@@ -1,10 +1,11 @@
 import { ColumnEnum, Column as ColumnType, Task as TaskType } from "@/models";
 import { useBoardStore } from "@/store";
-import { Color as TwColor, TwTextColor } from "@/utils";
+import { TwBackgroundColor, Color as TwColor, TwTextColor } from "@/utils";
 import { useState } from "react";
 import DropIndicator from "./drop-indicator";
 import Task from "./task";
 import { getIndicators, getNearestIndicator, reorder } from "./utils";
+import AddCard from "./add-task-button";
 
 type DragEvent = React.DragEvent<HTMLDivElement>;
 
@@ -28,7 +29,7 @@ const Column = ({
   const [active, setActive] = useState(false);
   const { draggedItem, setDraggedItem } = useBoardStore();
 
-  const headingColor = `text-${color}` satisfies TwTextColor;
+  const indicatorColor = `bg-${color}` satisfies TwBackgroundColor;
 
   const updateColumn = (cards: TaskType[]) => {
     const newColumn = {
@@ -79,29 +80,28 @@ const Column = ({
     updateColumn(copy);
   };
 
-  // const addNewCard = (card: TaskType) => {
-  //   updateColumn([...cards, card]);
-  // };
-
   return (
     <div
-      className={`w-56 h-full transition-colors shrink-0 pt-12 ${
+      className={`w-56 h-full transition-colors shrink-0 pt-12 flex flex-col ${
         active ? "bg-neutral-800/50" : "bg-neutral-800/0"
       }`}
     >
       <div className="mb-3 flex items-center gap-4 px-2">
-        <h3 className={`font-medium  ${headingColor}`}>{title}</h3>
+        <h3 className={`font-medium flex gap-2 items-center`}>
+          <span className={`rounded-full h-2 w-2 ${indicatorColor}`}></span>
+          {title}
+        </h3>
         <span className="bg-neutral-800 rounded-full flex items-center justify-center h-7 w-7 text-center text-sm">
           {cards.length}
         </span>
       </div>
+      <AddCard column={column} setCards={console.log} />
       <div
         onDragOver={handleDragOver}
         onDragLeave={handleDragLeave}
         onDrop={handleDragEnd}
         className={`h-full w-full`}
       >
-        {/* <AddCard column={column} setCards={addNewCard} /> */}
         {cards.map((card) => (
           <Task key={card.id} item={card} handleDragStart={handleDragStart} />
         ))}
