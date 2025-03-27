@@ -24,7 +24,7 @@ type Name =
 
 type Level = 100 | 200 | 300 | 400 | 500 | 600 | 700 | 800 | 900;
 
-type Color =
+export type Color =
   | `${Name}-${Level}`
   | 'inherit'
   | 'current'
@@ -35,3 +35,10 @@ type Color =
 export type TwBackgroundColor = `bg-${Color}`;
 
 export type TwTextColor = `text-${Color}`;
+
+export const TW_BOARD_COLORS = [
+  "orange-500",
+  "yellow-500",
+  "sky-500",
+  "emerald-500",
+] satisfies Color[];
