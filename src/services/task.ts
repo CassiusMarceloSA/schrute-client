@@ -1,6 +1,12 @@
+import { Task } from "@/models";
 import { request } from "@/utils";
 
-export async function getTasks() {
+type GetTasksResponse = {
+  tasks: Task[];
+  total: number;
+};
+
+export async function getTasks(): Promise<GetTasksResponse> {
   const { data } = await request.get("/tasks");
   return data;
 }
