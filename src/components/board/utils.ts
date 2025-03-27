@@ -47,7 +47,7 @@ export const reorder = (list: Task[], card: Task, before: string) => {
 
 const BOARD_ORDER = ["backlog", "todo", "doing", "done"] satisfies ColumnEnum[];
 export const getColumnColor = (
-  preffix: string,
+  preffix: "bg" | "text" | "border",
   column: ColumnEnum,
   opacity?: number
 ) => {
