@@ -2,7 +2,7 @@ import { Client, Databases, Storage } from "appwrite";
 
 const APPWRITE_URL = process.env.APPWRITE_URL || "";
 const APPWRITE_PROJECT_ID = process.env.APPWRITE_PROJECT_ID || "";
-const APPWRITE_API_KEY = process.env.APPWRITE_API_KEY || "";
+const APPWRITE_API_KEY = process.env.APPWRITE_SECRET_KEY || "";
 
 if (!APPWRITE_URL || !APPWRITE_PROJECT_ID || !APPWRITE_API_KEY) {
   throw new Error("Missing Appwrite environment variables");
