@@ -14,20 +14,22 @@ type ColumnProps = {
   column: ColumnEnum;
   cards: TaskType[];
   setColumn: (columnId: ColumnEnum, column: ColumnType) => void;
+  updateCardStatus: (cardId: string, status: ColumnEnum) => void;
 };
 
-const Column = ({ cards, column, color, setColumn, title }: ColumnProps) => {
+const Column = ({
+  cards,
+  column,
+  color,
+  setColumn,
+  title,
+  updateCardStatus,
+}: ColumnProps) => {
   const [active, setActive] = useState(false);
-  const [movingCard, setMovingCard] = useState<TaskType | null>(null);
-  const { board } = useBoardStore();
-  const allItems = Object.values(board.columns).reduce<TaskType[]>(
-    (acc, item) => {
-      return [...acc, ...item.tasks];
-    },
-    []
-  );
+  const { board, draggedItem, setDraggedItem } = useBoardStore();
 
   const headingColor = `text-${color}` satisfies TwTextColor;
+  const activeColor = headingColor.replace("text", "bg").concat("/10");
 
   const updateColumn = (cards: TaskType[]) => {
     const newColumn = {
@@ -37,17 +39,9 @@ const Column = ({ cards, column, color, setColumn, title }: ColumnProps) => {
     setColumn(column, newColumn);
   };
 
-  const updateCardStatus = (card: TaskType, list: TaskType[]) => {
-    card.status = column;
-    const copy = list.filter((item) => item.id !== card.id);
-    copy.push(card);
-    return copy;
-  };
-
   const handleDragStart = (e: DragEvent, card: TaskType) => {
-    console.log(card);
     e.dataTransfer.setData("cardId", card.id);
-    setMovingCard(card);
+    setDraggedItem(card);
   };
 
   const handleDragOver = (e: DragEvent) => {
@@ -61,8 +55,7 @@ const Column = ({ cards, column, color, setColumn, title }: ColumnProps) => {
 
   const handleDragEnd = (e: DragEvent) => {
     setActive(false);
-    const cardId = movingCard?.id || e.dataTransfer.getData("cardId");
-    console.log(cardId);
+    const cardId = draggedItem?.id!;
     const indicators = getIndicators(column);
     const { element: el } = getNearestIndicator(e, indicators);
     const before = el.dataset.before || "-1";
@@ -71,21 +64,17 @@ const Column = ({ cards, column, color, setColumn, title }: ColumnProps) => {
     }
 
     let copy = [...cards];
-    const cardToTransfer = allItems.find((card) => card.id === cardId);
-    copy.forEach((item) => console.log(item.id, cardId));
-    console.log(cardToTransfer);
-    if (!cardToTransfer) return;
 
-    const isDifferentColumn = !movingCard && cardId;
+    const isDifferentColumn = draggedItem?.status !== column;
     if (isDifferentColumn) {
-      copy = updateCardStatus(cardToTransfer, copy);
-      setMovingCard(null);
+      updateCardStatus(cardId, column);
+      setDraggedItem();
       updateColumn(copy);
       return;
     }
 
-    copy = reorder(copy, cardToTransfer, before);
-    setMovingCard(null);
+    copy = reorder(copy, draggedItem, before);
+    setDraggedItem();
     updateColumn(copy);
   };
 
@@ -96,7 +85,7 @@ const Column = ({ cards, column, color, setColumn, title }: ColumnProps) => {
   return (
     <div
       className={`w-56 h-full transition-colors shrink-0 pt-12 ${
-        active ? "bg-neutral-800" : "bg-neutral-800/0"
+        active ? "bg-neutral-800/50" : "bg-neutral-800/0"
       }`}
     >
       <div className="mb-3 flex items-center gap-4 px-2">
