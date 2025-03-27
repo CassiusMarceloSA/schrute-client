@@ -1,13 +1,23 @@
-import { Column } from ".";
-// import { Board as BoardType, Task as TaskType } from "@/models";
+import { Board } from "@/models";
+import { taskService } from "@/services";
 import { useBoardStore } from "@/store";
-import { TW_BOARD_COLORS, Color as TwColor } from "@/utils";
+import { TW_BOARD_COLORS } from "@/utils";
+import { useCallback, useEffect } from "react";
+import { Column } from ".";
 
-// type Props = BoardType;
 
 const Board = () => {
-  const { board, setColumn } = useBoardStore();
+  const { board, setColumn, setBoard } = useBoardStore();
   const columns = Object.values(board.columns);
+
+  const fetchTasks = useCallback(async () => {
+    const { tasks } = await taskService.getTasks();
+    setBoard(tasks);
+  }, []);
+
+  useEffect(() => {
+    fetchTasks();
+  }, []);
 
   return (
     <div className="h-screen w-full bg-neutral-900 overflow-x-hidden overflow-y-auto text-neutral-50">
