@@ -19,7 +19,6 @@ const AddCard = (props: Props) => {
       id: Date.now().toString(),
       title: text,
       status: props.column,
-      completed: false,
       description: "",
       createdAt: new Date(),
       duration: 30,

@@ -26,10 +26,9 @@ const Column = ({
   updateCardStatus,
 }: ColumnProps) => {
   const [active, setActive] = useState(false);
-  const { board, draggedItem, setDraggedItem } = useBoardStore();
+  const { draggedItem, setDraggedItem } = useBoardStore();
 
   const headingColor = `text-${color}` satisfies TwTextColor;
-  const activeColor = headingColor.replace("text", "bg").concat("/10");
 
   const updateColumn = (cards: TaskType[]) => {
     const newColumn = {
@@ -55,7 +54,9 @@ const Column = ({
 
   const handleDragEnd = (e: DragEvent) => {
     setActive(false);
-    const cardId = draggedItem?.id!;
+
+    if (!draggedItem) return;
+    const cardId = draggedItem.id;
     const indicators = getIndicators(column);
     const { element: el } = getNearestIndicator(e, indicators);
     const before = el.dataset.before || "-1";
