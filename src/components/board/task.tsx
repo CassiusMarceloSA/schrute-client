@@ -1,6 +1,7 @@
 import { Task as TaskType } from "@/models";
 import { useState } from "react";
 import DropIndicator from "./drop-indicator";
+import { getColumnColor } from "./utils";
 
 type Props = {
   item: TaskType;
@@ -9,11 +10,18 @@ type Props = {
 
 const Card = (props: Props) => {
   const [dragging, setDragging] = useState(false);
-  const bg = !dragging ? "bg-neutral-800" : "bg-purple-950";
-  const border = !dragging ? "border-neutral-700" : "border-purple-800";
+  const bg = !dragging ? "bg-neutral-800" : "bg-neutral-800/30";
+  const border = !dragging
+    ? "border-neutral-700"
+    : getColumnColor("border", props.item?.status, 50);
+
   return (
     <>
-      <DropIndicator beforeId={props.item?.id} column={props.item?.status} />
+      <DropIndicator
+        withHighlight={!dragging}
+        beforeId={props.item?.id}
+        column={props.item?.status}
+      />
       <div
         draggable
         onDragStart={(e) => {
