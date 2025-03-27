@@ -10,13 +10,12 @@ if (!databaseId || !collectionId) {
   throw new Error("Missing environment variables");
 }
 
-
 export async function PUT(
   req: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const { id } = params;
+    const { id } = await params;
     const { status } = await req.json();
 
     const validate = validateUpdateStatus({ status });
@@ -26,14 +25,9 @@ export async function PUT(
     }
 
     const [updateError, updatedTask] = await toResult(
-      databases.updateDocument(
-        databaseId,
-        collectionId,
-        id,
-        {
-          status,
-        }
-      )
+      databases.updateDocument(databaseId, collectionId, id, {
+        status,
+      })
     );
 
     if (updateError) {
