@@ -36,6 +36,8 @@ export type TwBackgroundColor = `bg-${Color}`;
 
 export type TwTextColor = `text-${Color}`;
 
+export type TwBorderColor = `border-${Color}`;
+
 export const TW_BOARD_COLORS = [
   "orange-500",
   "yellow-500",
