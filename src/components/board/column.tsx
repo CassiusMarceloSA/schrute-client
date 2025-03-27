@@ -2,7 +2,7 @@ import { useState } from "react";
 import AddCard from "./add-task-button";
 import Task from "./task";
 import DropIndicator from "./drop-indicator";
-import { TwTextColor } from "@/utils";
+import { Color as TwColor, TwTextColor } from "@/utils";
 import { Column as ColumnType, ColumnEnum, Task as TaskType } from "@/models";
 import { getIndicators, getNearestIndicator, reorder } from "./utils";
 import { useBoardStore } from "@/store";
@@ -11,19 +11,13 @@ type DragEvent = React.DragEvent<HTMLDivElement>;
 
 type ColumnProps = {
   title: string;
-  headingColor: TwTextColor;
+  color: TwColor;
   column: ColumnEnum;
   cards: TaskType[];
   setColumn: (columnId: ColumnEnum, column: ColumnType) => void;
 };
 
-const Column = ({
-  cards,
-  column,
-  headingColor,
-  setColumn,
-  title,
-}: ColumnProps) => {
+const Column = ({ cards, column, color, setColumn, title }: ColumnProps) => {
   const [active, setActive] = useState(false);
   const [movingCard, setMovingCard] = useState<TaskType | null>(null);
   const { board } = useBoardStore();
@@ -33,7 +27,9 @@ const Column = ({
     },
     []
   );
-  console.log(allItems);
+
+  const headingColor = `text-${color}` satisfies TwTextColor;
+
   const updateColumn = (cards: TaskType[]) => {
     const newColumn = {
       id: column,
@@ -99,20 +95,24 @@ const Column = ({
   };
 
   return (
-    <div className="w-56 shrink-0">
-      <div className="mb-3 flex items-center justify-between">
-        <h3 className={`font-medium ${headingColor}`}>{title}</h3>
-        <span className="rounded text-sm text-neutral-400">{cards.length}</span>
+    <div
+      className={`w-56 h-full transition-colors shrink-0 pt-12 ${
+        active ? "bg-neutral-800" : "bg-neutral-800/0"
+      }`}
+    >
+      <div className="mb-3 flex items-center gap-4 px-2">
+        <h3 className={`font-medium  ${headingColor}`}>{title}</h3>
+        <span className="bg-neutral-800 rounded-full flex items-center justify-center h-7 w-7 text-center text-sm">
+          {cards.length}
+        </span>
       </div>
       <div
         onDragOver={handleDragOver}
         onDragLeave={handleDragLeave}
         onDrop={handleDragEnd}
-        className={`h-full w-full transition-colors ${
-          active ? "bg-neutral-800/50" : "bg-neutral-800/0"
-        }`}
+        className={`h-full w-full`}
       >
-        <AddCard column={column} setCards={addNewCard} />
+        {/* <AddCard column={column} setCards={addNewCard} /> */}
         {cards.map((card) => (
           <Task key={card.id} item={card} handleDragStart={handleDragStart} />
         ))}
