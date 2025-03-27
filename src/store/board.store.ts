@@ -6,6 +6,7 @@ type BoardState = {
   board: Board;
   searchString: string;
   image: File | null;
+  draggedItem?: Task;
 };
 
 type BoardActions = {
@@ -15,6 +16,7 @@ type BoardActions = {
   setSearchString: (searchString: string) => void;
   setNewTask: (task: Task) => void;
   setImage: (image: File | null) => void;
+  setDraggedItem: (task?: Task) => void;
 };
 
 type BoardStore = BoardState & BoardActions;
@@ -82,7 +84,13 @@ const useTaskStore = create<BoardStore>()((set) => {
           },
         },
       }));
-    }
+    },
+    setDraggedItem: (task) => {
+      set((state) => ({
+        ...state,
+        draggedItem: task,
+      }));
+    },
   };
 });
 
