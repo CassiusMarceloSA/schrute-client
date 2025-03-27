@@ -1,5 +1,8 @@
 import { ColumnEnum } from "@/models";
-import { useEffect, useState } from "react";
+import { useBoardStore } from "@/store";
+import { TW_BOARD_COLORS } from "@/utils";
+import { useState } from "react";
+import { getColumnColor } from "./utils";
 
 type Props = {
   beforeId: string;
@@ -10,11 +13,12 @@ type Props = {
 
 const DropIndicator = ({ withHighlight = true, ...props }: Props) => {
   const [active, setActive] = useState(false);
-  const height = active || props.fullHeight ? `h-32` : "h-1";
-  const opacity = active && withHighlight ? "opacity-1" : "opacity-0";
-  useEffect(() => {
-    return () => setActive(false);
-  }, []);
+  const { draggedItem } = useBoardStore();
+  const isSameColumn = props.column === draggedItem?.status;
+  const highlightColor = getColumnColor("border", props.column, 40);
+  const height = (isSameColumn && active) || props.fullHeight ? `h-32` : "h-1";
+  const opacity =
+    isSameColumn && active && withHighlight ? "opacity-1" : "opacity-0";
 
   return (
     <div
@@ -24,7 +28,7 @@ const DropIndicator = ({ withHighlight = true, ...props }: Props) => {
       onDragEnd={() => setActive(false)}
       onDrop={() => setActive(false)}
       onDragLeave={() => setActive(false)}
-      className={`${height} w-full border border-dashed border-purple-700 ${opacity}`}
+      className={`${height} w-full border border-dashed ${highlightColor} ${opacity}`}
     ></div>
   );
 };
