@@ -5,7 +5,6 @@ export type Task = {
     title: string;
     description: string;
     duration: number;
-    completed: boolean;
     createdAt: Date;
     status: ColumnEnum
 }

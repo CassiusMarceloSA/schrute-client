@@ -10,9 +10,8 @@ type Props = {
 
 const DropIndicator = ({ withHighlight = true, ...props }: Props) => {
   const [active, setActive] = useState(false);
-  const height = active || props.fullHeight ? `h-12` : "h-1";
+  const height = active || props.fullHeight ? `h-32` : "h-1";
   const opacity = active && withHighlight ? "opacity-1" : "opacity-0";
-  const borderRadius = active ? "rounded-md" : "rounded-none";
   useEffect(() => {
     return () => setActive(false);
   }, []);
@@ -25,7 +24,7 @@ const DropIndicator = ({ withHighlight = true, ...props }: Props) => {
       onDragEnd={() => setActive(false)}
       onDrop={() => setActive(false)}
       onDragLeave={() => setActive(false)}
-      className={`${height} w-full border-zinc-400 border-dashed border ${borderRadius} ${opacity}`}
+      className={`${height} w-full border border-dashed border-purple-700 ${opacity}`}
     ></div>
   );
 };
