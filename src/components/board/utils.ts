@@ -1,4 +1,5 @@
 import { ColumnEnum, Task } from "@/models";
+import { TW_BOARD_COLORS } from "@/utils";
 
 export const getIndicators = (column: ColumnEnum) => {
   const indicators = Array.from(
@@ -42,4 +43,17 @@ export const reorder = (list: Task[], card: Task, before: string) => {
   }
 
   return copy;
+};
+
+const BOARD_ORDER = ["backlog", "todo", "doing", "done"] satisfies ColumnEnum[];
+export const getColumnColor = (
+  preffix: string,
+  column: ColumnEnum,
+  opacity?: number
+) => {
+  const color =
+    TW_BOARD_COLORS[BOARD_ORDER.findIndex((item) => item === column)];
+
+  if (!opacity) return `${preffix}-${color}`;
+  return `${preffix}-${color}/${opacity}`;
 };
