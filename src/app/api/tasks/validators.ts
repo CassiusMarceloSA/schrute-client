@@ -10,6 +10,6 @@ const createTaskSchema = z.object({
   duration: z.string().min(1, { message: "Duration is required" }),
 });
 
-export function validateCreateTask(body: any) {
+export function validateCreateTask(body: Record<string, string>) {
   return createTaskSchema.safeParse(body);
 }

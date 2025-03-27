@@ -1,11 +1,10 @@
-import { useState } from "react";
-import AddCard from "./add-task-button";
-import Task from "./task";
-import DropIndicator from "./drop-indicator";
-import { Color as TwColor, TwTextColor } from "@/utils";
-import { Column as ColumnType, ColumnEnum, Task as TaskType } from "@/models";
-import { getIndicators, getNearestIndicator, reorder } from "./utils";
+import { ColumnEnum, Column as ColumnType, Task as TaskType } from "@/models";
 import { useBoardStore } from "@/store";
+import { Color as TwColor, TwTextColor } from "@/utils";
+import { useState } from "react";
+import DropIndicator from "./drop-indicator";
+import Task from "./task";
+import { getIndicators, getNearestIndicator, reorder } from "./utils";
 
 type DragEvent = React.DragEvent<HTMLDivElement>;
 
@@ -90,9 +89,9 @@ const Column = ({ cards, column, color, setColumn, title }: ColumnProps) => {
     updateColumn(copy);
   };
 
-  const addNewCard = (card: TaskType) => {
-    updateColumn([...cards, card]);
-  };
+  // const addNewCard = (card: TaskType) => {
+  //   updateColumn([...cards, card]);
+  // };
 
   return (
     <div

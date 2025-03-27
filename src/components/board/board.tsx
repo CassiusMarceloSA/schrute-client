@@ -11,13 +11,14 @@ const Board = () => {
   const columns = Object.values(board.columns);
 
   const fetchTasks = useCallback(async () => {
+    console.log('rerendered')
     const { tasks } = await taskService.getTasks();
     setBoard(tasks);
-  }, []);
+  }, [setBoard]);
 
   useEffect(() => {
     fetchTasks();
-  }, []);
+  }, [fetchTasks]);
 
   return (
     <div className="h-screen w-full bg-neutral-900 overflow-x-hidden overflow-y-auto text-neutral-50">

@@ -1,7 +1,5 @@
 import { Board, Column, ColumnEnum, Task } from "@/models";
-import { taskService } from "@/services";
 import { create } from "zustand";
-import { persist } from "zustand/middleware";
 import { mapTasksToBoard } from "./utils";
 
 type BoardState = {

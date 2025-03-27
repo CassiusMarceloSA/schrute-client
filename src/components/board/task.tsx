@@ -1,7 +1,6 @@
 import { Task as TaskType } from "@/models";
-import DropIndicator from "./drop-indicator";
 import { useState } from "react";
-import { TwBackgroundColor } from "@/utils";
+import DropIndicator from "./drop-indicator";
 
 type Props = {
   item: TaskType;
