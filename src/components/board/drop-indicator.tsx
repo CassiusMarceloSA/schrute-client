@@ -42,7 +42,7 @@ const DropIndicator = ({ withHighlight = true, ...props }: Props) => {
       onDragEnd={resetActive}
       onDrop={resetActive}
       onDragLeave={resetActive}
-      className={`${height} w-full border border-dashed ${highlightColor} ${opacity}`}
+      className={`${height} w-full border border-dashed rounded-sm ${highlightColor} ${opacity}`}
     ></div>
   );
 };

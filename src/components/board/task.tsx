@@ -29,9 +29,9 @@ const Card = (props: Props) => {
           setDragging(true);
         }}
         onDragEnd={() => setDragging(false)}
-        className={`cursor-grab rounder border overflow-hidden p-3 active:cursor-grabbing my-1 ${border} ${bg}`}
+        className={`cursor-grab rounded-sm border overflow-hidden p-3 active:cursor-grabbing my-1 ${border} ${bg}`}
       >
-        <p className="text-sm text-neutral-100 my-2">{props.item?.title}</p>
+        <p className="text-base text-neutral-100 my-2">{props.item?.title}</p>
         <p className="text-xs text-neutral-400">{props.item?.description}</p>
       </div>
     </>
