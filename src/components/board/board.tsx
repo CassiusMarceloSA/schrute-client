@@ -1,10 +1,9 @@
+import { Loader } from "@/components/shared";
 import { ColumnEnum } from "@/models";
 import { taskService } from "@/services";
 import { useBoardStore } from "@/store";
 import { TW_BOARD_COLORS } from "@/utils";
-import { Loader } from "@/components/shared";
 import { useMutation, useQuery } from "@tanstack/react-query";
-import { useCallback, useEffect } from "react";
 import { Column } from ".";
 
 const Board = () => {

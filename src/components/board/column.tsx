@@ -1,11 +1,11 @@
 import { ColumnEnum, Column as ColumnType, Task as TaskType } from "@/models";
 import { useBoardStore } from "@/store";
-import { TwBackgroundColor, Color as TwColor, TwTextColor } from "@/utils";
+import { TwBackgroundColor, Color as TwColor } from "@/utils";
 import { useState } from "react";
+import AddCard from "./add-task-button";
 import DropIndicator from "./drop-indicator";
 import Task from "./task";
 import { getIndicators, getNearestIndicator, reorder } from "./utils";
-import AddCard from "./add-task-button";
 
 type DragEvent = React.DragEvent<HTMLDivElement>;
 
