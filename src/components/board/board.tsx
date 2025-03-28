@@ -2,6 +2,7 @@ import { ColumnEnum } from "@/models";
 import { taskService } from "@/services";
 import { useBoardStore } from "@/store";
 import { TW_BOARD_COLORS } from "@/utils";
+import { Loader } from "@/components/shared";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { useCallback, useEffect } from "react";
 import { Column } from ".";
@@ -15,7 +16,7 @@ const Board = () => {
 
   const updateTask = async (id: string, status: ColumnEnum) => {
     await taskService.updateTaskStatus(id, status);
-    fetchTasks();
+    await fetchTasks();
   };
 
   const { board, setColumn, setBoard } = useBoardStore();
@@ -36,11 +37,10 @@ const Board = () => {
 
   return (
     <div className="h-full w-full bg-neutral-900 overflow-x-hidden overflow-y-auto text-neutral-50">
+      {isLoading && <Loader />}
       <div className="flex h-full w-full gap-3 px-12">
-        {isLoading && <div>Loading...</div>}
-        {!isLoading &&
-          columns.map((item, index) => (
-            <Column
+        {columns.map((item, index) => (
+          <Column
               key={item.id}
               column={item.id}
               title={item.id}
