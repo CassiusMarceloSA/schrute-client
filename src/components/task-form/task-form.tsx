@@ -1,7 +1,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import { Input } from "../shared";
+import { Input, Textarea } from "../shared";
 
 const DEFAULT_DURATION = 15;
 
@@ -49,11 +49,12 @@ export const TaskForm = (props: FormProps) => {
           label="Title"
           placeholder="Enter task title"
         />
-        <Input
+        <Textarea
           {...form.register("description")}
           error={getFieldError("description")}
           label="Description"
           placeholder="Enter task description"
+          
         />
         <Input
           {...form.register("duration")}

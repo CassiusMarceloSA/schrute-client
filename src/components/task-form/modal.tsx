@@ -2,6 +2,7 @@ import { z } from "zod";
 import { Button, Modal } from "../shared";
 import { TaskForm, formSchema } from "./task-form";
 import { useState } from "react";
+import { Plus } from "lucide-react";
 
 type Props = {
   onSubmit: (args: z.infer<typeof formSchema>) => Promise<void> | void;
@@ -22,7 +23,12 @@ export function TaskFormModal(props: Props) {
     <Modal.Content
       open={open}
       updateOpen={setOpen}
-      buttonText="open modal"
+      buttonContent={
+        <>
+          <Plus size={12} />
+          Add new task
+        </>
+      }
       title="Task form"
       description="Include data to add new task"
     >
@@ -33,7 +39,7 @@ export function TaskFormModal(props: Props) {
             Back
           </Button>
         </Modal.Close>
-        <Button type="submit" form="task-form">
+        <Button variant="secondary" type="submit" form="task-form">
           Submit
         </Button>
       </Modal.Footer>
