@@ -43,14 +43,19 @@ export function TaskFormModal(props: Props) {
       title="Task form"
       description="Include data to add new task"
     >
-      <TaskForm onSubmit={handleSubmit} />
+      <TaskForm isAdding={props.isAdding} onSubmit={handleSubmit} />
       <Modal.Footer className="sm:justify-between">
         <Modal.Close asChild>
           <Button type="button" variant="ghost">
             Back
           </Button>
         </Modal.Close>
-        <Button variant="secondary" type="submit" form="task-form">
+        <Button
+          variant="secondary"
+          type="submit"
+          form="task-form"
+          disabled={props.isAdding}
+        >
           Submit
         </Button>
       </Modal.Footer>
