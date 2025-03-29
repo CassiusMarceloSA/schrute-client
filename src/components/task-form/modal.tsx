@@ -28,7 +28,7 @@ export function TaskFormModal(props: Props) {
     if (!props.isAdding && shouldClose) {
       setOpen(false);
     }
-  }, [props.isAdding]);
+  }, [props.isAdding, shouldClose]);
 
   return (
     <Modal.Content

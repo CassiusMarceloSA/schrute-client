@@ -7,6 +7,7 @@ import { Skeleton } from "../ui/skeleton";
 import DropIndicator from "./drop-indicator";
 import Task from "./task";
 import { getIndicators, getNearestIndicator, reorder } from "./utils";
+import { CreateTaskPayload } from "@/app/api/tasks/models";
 
 type DragEvent = React.DragEvent<HTMLDivElement>;
 
@@ -15,7 +16,7 @@ type ColumnProps = {
   color: TwColor;
   column: ColumnEnum;
   cards: TaskType[];
-  addTask: (args: any) => void;
+  addTask: (payload: CreateTaskPayload) => void;
   setColumn: (columnId: ColumnEnum, column: ColumnType) => void;
   updateCardStatus: (cardId: string, status: ColumnEnum) => void;
   isLoading?: boolean;

@@ -5,6 +5,7 @@ import { useBoardStore } from "@/store";
 import { TW_BOARD_COLORS } from "@/utils";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { Column } from ".";
+import { CreateTaskPayload } from "@/app/api/tasks/models";
 
 const Board = () => {
   const { board, setColumn, setBoard } = useBoardStore();
@@ -33,7 +34,7 @@ const Board = () => {
   });
 
   const { mutate: addTaskMutation, isPending: isAdding } = useMutation({
-    mutationFn: (payload: any) => taskService.createTask(payload),
+    mutationFn: (payload: CreateTaskPayload) => taskService.createTask(payload),
     onSuccess: () => {
       refetch();
     },
