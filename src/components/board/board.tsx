@@ -32,6 +32,13 @@ const Board = () => {
     },
   });
 
+  const { mutate: addTaskMutation, isPending: isAdding } = useMutation({
+    mutationFn: (payload: any) => taskService.createTask(payload),
+    onSuccess: () => {
+      refetch();
+    },
+  });
+
   const columns = Object.values(board.columns);
 
   const isRefetching = !isLoading && (isFetching || isUpdating);
@@ -52,6 +59,8 @@ const Board = () => {
             updateCardStatus={(taskId, status) =>
               updateTaskMutation({ id: taskId, status })
             }
+            addTask={addTaskMutation}
+            isAdding={isAdding}
           />
         ))}
       </div>

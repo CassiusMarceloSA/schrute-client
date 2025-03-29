@@ -1,23 +1,34 @@
 import { z } from "zod";
 import { Button, Modal } from "../shared";
 import { TaskForm, formSchema } from "./task-form";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Plus } from "lucide-react";
+import { ColumnEnum } from "@/models";
 
 type Props = {
-  onSubmit: (args: z.infer<typeof formSchema>) => Promise<void> | void;
+  onSubmit: (
+    args: z.infer<typeof formSchema> & { status: ColumnEnum }
+  ) => Promise<void> | void;
   closeAfterSubmit?: boolean;
+  isAdding?: boolean;
 };
 
 export function TaskFormModal(props: Props) {
   const [open, setOpen] = useState(false);
+  const [shouldClose, setShouldClose] = useState(false);
 
   const handleSubmit = async (data: z.infer<typeof formSchema>) => {
-    await props.onSubmit(data);
+    await props.onSubmit({ ...data, status: "backlog" });
     if (props.closeAfterSubmit) {
-      setOpen(false);
+      setShouldClose(true);
     }
   };
+
+  useEffect(() => {
+    if (!props.isAdding && shouldClose) {
+      setOpen(false);
+    }
+  }, [props.isAdding]);
 
   return (
     <Modal.Content

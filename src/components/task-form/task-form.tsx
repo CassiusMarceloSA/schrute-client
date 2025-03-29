@@ -54,7 +54,6 @@ export const TaskForm = (props: FormProps) => {
           error={getFieldError("description")}
           label="Description"
           placeholder="Enter task description"
-          
         />
         <Input
           {...form.register("duration")}
