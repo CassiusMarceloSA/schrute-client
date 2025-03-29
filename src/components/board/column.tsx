@@ -6,6 +6,7 @@ import AddCard from "./add-task-button";
 import DropIndicator from "./drop-indicator";
 import Task from "./task";
 import { getIndicators, getNearestIndicator, reorder } from "./utils";
+import { Skeleton } from "../ui/skeleton";
 
 type DragEvent = React.DragEvent<HTMLDivElement>;
 
@@ -16,6 +17,17 @@ type ColumnProps = {
   cards: TaskType[];
   setColumn: (columnId: ColumnEnum, column: ColumnType) => void;
   updateCardStatus: (cardId: string, status: ColumnEnum) => void;
+  isLoading?: boolean;
+};
+
+const ColumnLoader = () => {
+  return (
+    <div className="flex flex-col gap-2 w-full">
+      <Skeleton className="bg-neutral-600 h-32 w-full mt-2 mb-3" />
+      <Skeleton className="bg-neutral-600 h-32 w-full mt-2 mb-3" />
+      <Skeleton className="bg-neutral-600 h-32 w-full mt-2 mb-3" />
+    </div>
+  );
 };
 
 const Column = ({
@@ -25,6 +37,7 @@ const Column = ({
   setColumn,
   title,
   updateCardStatus,
+  isLoading = false,
 }: ColumnProps) => {
   const [active, setActive] = useState(false);
   const { draggedItem, setDraggedItem } = useBoardStore();
@@ -96,17 +109,21 @@ const Column = ({
         </span>
       </div>
       <AddCard column={column} setCards={console.log} />
-      <div
-        onDragOver={handleDragOver}
-        onDragLeave={handleDragLeave}
-        onDrop={handleDragEnd}
-        className={`h-full w-full`}
-      >
-        {cards.map((card) => (
-          <Task key={card.id} item={card} handleDragStart={handleDragStart} />
-        ))}
-        <DropIndicator fullHeight beforeId="-1" column={column} />
-      </div>
+      {isLoading ? (
+        <ColumnLoader />
+      ) : (
+        <div
+          onDragOver={handleDragOver}
+          onDragLeave={handleDragLeave}
+          onDrop={handleDragEnd}
+          className={`h-full w-full`}
+        >
+          {cards.map((card) => (
+            <Task key={card.id} item={card} handleDragStart={handleDragStart} />
+          ))}
+          <DropIndicator fullHeight beforeId="-1" column={column} />
+        </div>
+      )}
     </div>
   );
 };
