@@ -2,10 +2,12 @@ import { ColumnEnum, Column as ColumnType, Task as TaskType } from "@/models";
 import { useBoardStore } from "@/store";
 import { TwBackgroundColor, Color as TwColor } from "@/utils";
 import { useState } from "react";
-import AddCard from "./add-task-button";
+import { TaskFormModal } from "../task-form";
+import { Skeleton } from "../ui/skeleton";
 import DropIndicator from "./drop-indicator";
 import Task from "./task";
 import { getIndicators, getNearestIndicator, reorder } from "./utils";
+import { CreateTaskPayload } from "@/app/api/tasks/models";
 
 type DragEvent = React.DragEvent<HTMLDivElement>;
 
@@ -14,8 +16,21 @@ type ColumnProps = {
   color: TwColor;
   column: ColumnEnum;
   cards: TaskType[];
+  addTask: (payload: CreateTaskPayload) => void;
   setColumn: (columnId: ColumnEnum, column: ColumnType) => void;
   updateCardStatus: (cardId: string, status: ColumnEnum) => void;
+  isLoading?: boolean;
+  isAdding?: boolean;
+};
+
+const ColumnLoader = () => {
+  return (
+    <div className="flex flex-col gap-2 w-full">
+      <Skeleton className="bg-neutral-800 h-32 w-full mt-2 mb-3" />
+      <Skeleton className="bg-neutral-800 h-32 w-full mt-2 mb-3" />
+      <Skeleton className="bg-neutral-800 h-32 w-full mt-2 mb-3" />
+    </div>
+  );
 };
 
 const Column = ({
@@ -25,6 +40,9 @@ const Column = ({
   setColumn,
   title,
   updateCardStatus,
+  addTask,
+  isLoading = false,
+  isAdding = false,
 }: ColumnProps) => {
   const [active, setActive] = useState(false);
   const { draggedItem, setDraggedItem } = useBoardStore();
@@ -82,11 +100,11 @@ const Column = ({
 
   return (
     <div
-      className={`w-56 h-full transition-colors shrink-0 pt-12 flex flex-col ${
+      className={`w-56 gap-2 h-full transition-colors shrink-0 pt-12 flex flex-col ${
         active ? "bg-neutral-800/50" : "bg-neutral-800/0"
       }`}
     >
-      <div className="mb-3 flex items-center gap-4 px-2">
+      <div className="mb-3 flex items-center justify-between gap-4 px-2">
         <h3 className={`font-medium flex gap-2 items-center`}>
           <span className={`rounded-full h-2 w-2 ${indicatorColor}`}></span>
           {title}
@@ -95,18 +113,22 @@ const Column = ({
           {cards.length}
         </span>
       </div>
-      <AddCard column={column} setCards={console.log} />
-      <div
-        onDragOver={handleDragOver}
-        onDragLeave={handleDragLeave}
-        onDrop={handleDragEnd}
-        className={`h-full w-full`}
-      >
-        {cards.map((card) => (
-          <Task key={card.id} item={card} handleDragStart={handleDragStart} />
-        ))}
-        <DropIndicator fullHeight beforeId="-1" column={column} />
-      </div>
+      <TaskFormModal isAdding={isAdding} closeAfterSubmit onSubmit={addTask} />
+      {isLoading ? (
+        <ColumnLoader />
+      ) : (
+        <div
+          onDragOver={handleDragOver}
+          onDragLeave={handleDragLeave}
+          onDrop={handleDragEnd}
+          className={`h-full w-full`}
+        >
+          {cards.map((card) => (
+            <Task key={card.id} item={card} handleDragStart={handleDragStart} />
+          ))}
+          <DropIndicator fullHeight beforeId="-1" column={column} />
+        </div>
+      )}
     </div>
   );
 };

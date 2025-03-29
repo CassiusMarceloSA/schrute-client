@@ -1,7 +1,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import { Input } from "../shared";
+import { Input, Textarea } from "../shared";
 
 const DEFAULT_DURATION = 15;
 
@@ -13,9 +13,10 @@ export const formSchema = z.object({
 
 export type FormProps = {
   onSubmit: (data: z.infer<typeof formSchema>) => void;
+  isAdding?: boolean;
 } & Omit<React.FormHTMLAttributes<HTMLFormElement>, "onSubmit">;
 
-export const TaskForm = (props: FormProps) => {
+export const TaskForm = ({isAdding, ...props}: FormProps) => {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -48,12 +49,14 @@ export const TaskForm = (props: FormProps) => {
           error={getFieldError("title")}
           label="Title"
           placeholder="Enter task title"
+          disabled={isAdding}
         />
-        <Input
+        <Textarea
           {...form.register("description")}
           error={getFieldError("description")}
           label="Description"
           placeholder="Enter task description"
+          disabled={isAdding}
         />
         <Input
           {...form.register("duration")}
@@ -62,6 +65,7 @@ export const TaskForm = (props: FormProps) => {
           min={1}
           label="Duration (minutes)"
           placeholder="Enter task duration"
+          disabled={isAdding}
         />
       </form>
     </>

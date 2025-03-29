@@ -1,3 +1,4 @@
+import { CreateTaskPayload } from "@/app/api/tasks/models";
 import { Task } from "@/models";
 import { request } from "@/utils";
 
@@ -19,6 +20,10 @@ export async function updateTaskStatus(
   return data;
 }
 
-export async function createTask() {}
+export async function createTask(payload: CreateTaskPayload) {
+  const { data } = await request.post("/tasks", payload);
+  return data;
+}
+
 export async function updateTask() {}
 export async function deleteTask() {}
