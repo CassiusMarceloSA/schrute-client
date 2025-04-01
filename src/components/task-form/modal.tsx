@@ -15,20 +15,30 @@ type Props = {
 
 export function TaskFormModal(props: Props) {
   const [open, setOpen] = useState(false);
-  const [shouldClose, setShouldClose] = useState(false);
+  const [status, setStatus] = useState<"initial" | "adding" | "finished">(
+    "initial"
+  );
 
   const handleSubmit = async (data: z.infer<typeof formSchema>) => {
     await props.onSubmit({ ...data, status: "backlog" });
-    if (props.closeAfterSubmit) {
-      setShouldClose(true);
-    }
   };
 
   useEffect(() => {
-    if (!props.isAdding && shouldClose) {
-      setOpen(false);
+    props.isAdding && setStatus("adding");
+  }, [props.isAdding]);
+
+  useEffect(() => {
+    if (status === "adding" && !props.isAdding) {
+      setStatus("finished");
     }
-  }, [props.isAdding, shouldClose]);
+  }, [props.isAdding]);
+
+  useEffect(() => {
+    if (status === "finished" && props.closeAfterSubmit) {
+      setOpen(false);
+      setStatus("initial");
+    }
+  }, [status]);
 
   return (
     <Modal.Content
