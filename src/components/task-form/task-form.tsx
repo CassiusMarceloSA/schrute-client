@@ -1,7 +1,10 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import { Input, Textarea } from "../shared";
+import { Button, Input, Textarea } from "../shared";
+import { WandSparkles } from "lucide-react";
+import { useMutation } from "@tanstack/react-query";
+import { aiService } from "@/services";
 
 const DEFAULT_DURATION = 15;
 
@@ -16,7 +19,7 @@ export type FormProps = {
   isAdding?: boolean;
 } & Omit<React.FormHTMLAttributes<HTMLFormElement>, "onSubmit">;
 
-export const TaskForm = ({isAdding, ...props}: FormProps) => {
+export const TaskForm = ({ isAdding, ...props }: FormProps) => {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -24,6 +27,7 @@ export const TaskForm = ({isAdding, ...props}: FormProps) => {
       description: "",
       duration: DEFAULT_DURATION,
     },
+    reValidateMode: "onSubmit"
   });
 
   function onSubmit(values: z.infer<typeof formSchema>) {
@@ -34,6 +38,18 @@ export const TaskForm = ({isAdding, ...props}: FormProps) => {
     const fieldError = form.formState.errors[fieldName];
     return fieldError?.message;
   }
+
+  const { mutate: aiGenerateMutation, isPending: isAiGenerating } = useMutation(
+    {
+      mutationFn: () =>
+        aiService.getAiResponse(form.watch("description"), form.watch("title")),
+      onSuccess: (data) => {
+        form.setValue("description", data);
+      },
+    }
+  );
+
+  const isEnhanceDisabled = !form.watch("title") || isAiGenerating;
 
   return (
     <>
@@ -51,13 +67,23 @@ export const TaskForm = ({isAdding, ...props}: FormProps) => {
           placeholder="Enter task title"
           disabled={isAdding}
         />
-        <Textarea
-          {...form.register("description")}
-          error={getFieldError("description")}
-          label="Description"
-          placeholder="Enter task description"
-          disabled={isAdding}
-        />
+        <div>
+          <Textarea
+            {...form.register("description")}
+            error={getFieldError("description")}
+            label="Description"
+            placeholder="Enter task description"
+            disabled={isAdding || isAiGenerating}
+          />
+          <Button
+            className="px-0"
+            onClick={() => aiGenerateMutation()}
+            disabled={isEnhanceDisabled}
+          >
+            <WandSparkles />
+            Enhance text
+          </Button>
+        </div>
         <Input
           {...form.register("duration")}
           error={getFieldError("duration")}
