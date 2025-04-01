@@ -20,8 +20,8 @@ export async function POST(req: Request) {
   const [, body] = await toResult(req.json());
   const { content, title } = body;
 
-  if (!content || !title) {
-    return new Response("No content or title in the request", { status: 400 });
+  if (!title) {
+    return new Response("No title in the request", { status: 400 });
   }
 
   const [promptError, response] = await toResult(
