@@ -45,9 +45,9 @@ const Board = () => {
   const isRefetching = !isLoading && (isFetching || isUpdating);
 
   return (
-    <div className="h-full w-full bg-neutral-900 overflow-x-hidden overflow-y-auto text-neutral-50">
+    <div className="h-full px-8 overflow-hidden text-neutral-200 rounded-lg">
       {isRefetching && <Loader />}
-      <div className="flex justify-center h-full w-full gap-3 px-12">
+      <div className="flex justify-center h-full w-full gap-3 py-8">
         {columns.map((item, index) => (
           <Column
             isLoading={isLoading}

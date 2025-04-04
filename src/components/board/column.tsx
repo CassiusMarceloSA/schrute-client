@@ -1,6 +1,6 @@
 import { ColumnEnum, Column as ColumnType, Task as TaskType } from "@/models";
 import { useBoardStore } from "@/store";
-import { TwBackgroundColor, Color as TwColor } from "@/utils";
+import { TwBackgroundColor, TwBorderColor, Color as TwColor } from "@/utils";
 import { useState } from "react";
 import { TaskFormModal } from "../task-form";
 import { Skeleton } from "../ui/skeleton";
@@ -46,8 +46,14 @@ const Column = ({
 }: ColumnProps) => {
   const [active, setActive] = useState(false);
   const { draggedItem, setDraggedItem } = useBoardStore();
-
   const indicatorColor = `bg-${color}` satisfies TwBackgroundColor;
+  const borderColor = `border-${color}` satisfies TwBorderColor;
+
+  const styles = {
+    bg: active ? "bg-neutral-800/50" : "bg-neutral-800/0",
+    border: active ? borderColor : "border-neutral-700",
+    height: cards.length ? "h-auto" : "h-fit",
+  };
 
   const updateColumn = (cards: TaskType[]) => {
     const newColumn = {
@@ -100,9 +106,7 @@ const Column = ({
 
   return (
     <div
-      className={`w-56 gap-2 h-full transition-colors shrink-0 pt-12 flex flex-col ${
-        active ? "bg-neutral-800/50" : "bg-neutral-800/0"
-      }`}
+      className={`w-56 gap-2 border border-neutral-600 rounded-lg px-4 transition-colors shrink-0 py-3 flex flex-col ${styles.bg} ${styles.border} ${styles.height}`}
     >
       <div className="mb-3 flex items-center justify-between gap-4 px-2">
         <h3 className={`font-medium flex gap-2 items-center`}>
@@ -121,7 +125,7 @@ const Column = ({
           onDragOver={handleDragOver}
           onDragLeave={handleDragLeave}
           onDrop={handleDragEnd}
-          className={`h-full w-full`}
+          className={`h-full w-full overflow-auto scrollbar-hide`}
         >
           {cards.map((card) => (
             <Task key={card.id} item={card} handleDragStart={handleDragStart} />

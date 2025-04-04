@@ -6,14 +6,20 @@ import { getColumnColor } from "./utils";
 type Props = {
   item: TaskType;
   handleDragStart: (e: React.DragEvent<HTMLDivElement>, item: TaskType) => void;
+  isDraggable?: boolean;
+  showDescription?: boolean;
 };
 
-const Card = (props: Props) => {
+const Card = ({ isDraggable = true, ...props }: Props) => {
   const [dragging, setDragging] = useState(false);
   const bg = !dragging ? "bg-neutral-800" : "bg-neutral-800/30";
   const border = !dragging
     ? "border-neutral-700"
     : getColumnColor("border", props.item?.status, 50);
+  const cursor = isDraggable
+    ? "cursor-grab active:cursor-grabbing"
+    : "cursor-default";
+  const textSize = props.showDescription ? "text-base" : "text-sm";
 
   return (
     <>
@@ -23,16 +29,20 @@ const Card = (props: Props) => {
         column={props.item?.status}
       />
       <div
-        draggable
+        draggable={isDraggable}
         onDragStart={(e) => {
           props.handleDragStart(e, props?.item);
           setDragging(true);
         }}
         onDragEnd={() => setDragging(false)}
-        className={`cursor-grab rounded-sm border overflow-hidden p-3 active:cursor-grabbing my-1 ${border} ${bg}`}
+        className={`rounded-sm border overflow-hidden p-3  my-1 ${border} ${bg} ${cursor}`}
       >
-        <p className="text-base text-neutral-100 my-2">{props.item?.title}</p>
-        <p className="text-xs text-neutral-400">{props.item?.description}</p>
+        <p className={` text-neutral-100 my-2 ${textSize}`}>
+          {props.item?.title}
+        </p>
+        {props.showDescription && (
+          <p className="text-xs text-neutral-400">{props.item?.description}</p>
+        )}
       </div>
     </>
   );
