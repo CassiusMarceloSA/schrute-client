@@ -24,21 +24,23 @@ export function TaskFormModal(props: Props) {
   };
 
   useEffect(() => {
-    props.isAdding && setStatus("adding");
+    if (props.isAdding) {
+      setStatus("adding");
+    }
   }, [props.isAdding]);
 
   useEffect(() => {
     if (status === "adding" && !props.isAdding) {
       setStatus("finished");
     }
-  }, [props.isAdding]);
+  }, [props.isAdding, status]);
 
   useEffect(() => {
     if (status === "finished" && props.closeAfterSubmit) {
       setOpen(false);
       setStatus("initial");
     }
-  }, [status]);
+  }, [status, props.closeAfterSubmit]);
 
   return (
     <Modal.Content

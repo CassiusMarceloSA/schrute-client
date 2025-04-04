@@ -42,5 +42,5 @@ export const TW_BOARD_COLORS = [
   "orange-500",
   "yellow-500",
   "sky-500",
-  "emerald-500",
+  "teal-500",
 ] satisfies Color[];

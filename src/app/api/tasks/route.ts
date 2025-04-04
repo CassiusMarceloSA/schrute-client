@@ -3,6 +3,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { validateCreateTask } from "./validators";
 import { sanitizeTaskList } from "./parser";
 import { toResult } from "@/utils";
+import { Query } from "appwrite";
 
 const databaseId = process.env.APPWRITE_DATABASE_ID || "";
 const collectionId = process.env.APPWRITE_COLLECTION_ID || "";
@@ -11,9 +12,16 @@ if (!databaseId || !collectionId) {
   throw new Error("Missing environment variables");
 }
 
-export async function GET() {
+export async function GET(req: NextRequest) {
+  const query = req.nextUrl.searchParams.get("query");
+
+  const queries = [
+    Query.contains("title", query || ""),
+    Query.contains("description", query || ""),
+  ];
+
   const [taskError, tasks] = await toResult(
-    databases.listDocuments(databaseId, collectionId)
+    databases.listDocuments(databaseId, collectionId, [Query.or(queries)])
   );
   if (taskError) {
     return NextResponse.json(taskError, { status: 500 });
