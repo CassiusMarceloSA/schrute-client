@@ -7,6 +7,7 @@ type Props = {
   item: TaskType;
   handleDragStart: (e: React.DragEvent<HTMLDivElement>, item: TaskType) => void;
   isDraggable?: boolean;
+  showDescription?: boolean;
 };
 
 const Card = ({ isDraggable = true, ...props }: Props) => {
@@ -15,7 +16,10 @@ const Card = ({ isDraggable = true, ...props }: Props) => {
   const border = !dragging
     ? "border-neutral-700"
     : getColumnColor("border", props.item?.status, 50);
-  const cursor = isDraggable ? "cursor-grab active:cursor-grabbing" : "cursor-default";
+  const cursor = isDraggable
+    ? "cursor-grab active:cursor-grabbing"
+    : "cursor-default";
+  const textSize = props.showDescription ? "text-base" : "text-sm";
 
   return (
     <>
@@ -33,8 +37,12 @@ const Card = ({ isDraggable = true, ...props }: Props) => {
         onDragEnd={() => setDragging(false)}
         className={`rounded-sm border overflow-hidden p-3  my-1 ${border} ${bg} ${cursor}`}
       >
-        <p className="text-base text-neutral-100 my-2">{props.item?.title}</p>
-        <p className="text-xs text-neutral-400">{props.item?.description}</p>
+        <p className={` text-neutral-100 my-2 ${textSize}`}>
+          {props.item?.title}
+        </p>
+        {props.showDescription && (
+          <p className="text-xs text-neutral-400">{props.item?.description}</p>
+        )}
       </div>
     </>
   );

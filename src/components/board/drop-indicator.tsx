@@ -17,7 +17,7 @@ const DropIndicator = ({ withHighlight = true, ...props }: Props) => {
   const highlightColor = getColumnColor("border", props.column, 40);
   const height =
     (isSameColumn && active && withHighlight) || props.fullHeight
-      ? `h-32`
+      ? `h-24`
       : "h-1";
   const opacity =
     isSameColumn && active && withHighlight ? "opacity-1" : "opacity-0";
@@ -42,7 +42,7 @@ const DropIndicator = ({ withHighlight = true, ...props }: Props) => {
       onDragEnd={resetActive}
       onDrop={resetActive}
       onDragLeave={resetActive}
-      className={`${height} w-full border border-dashed rounded-sm ${highlightColor} ${opacity}`}
+      className={`${height} w-full h- border border-dashed rounded-sm ${highlightColor} ${opacity}`}
     ></div>
   );
 };
