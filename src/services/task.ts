@@ -7,8 +7,8 @@ type GetTasksResponse = {
   total: number;
 };
 
-export async function getTasks(): Promise<GetTasksResponse> {
-  const { data } = await request.get("/tasks");
+export async function getTasks(query?: string): Promise<GetTasksResponse> {
+  const { data } = await request.get("/tasks", { params: { query } });
   return data;
 }
 
