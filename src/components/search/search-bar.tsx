@@ -85,7 +85,7 @@ const SearchBar = () => {
         return;
       }
     },
-    [active, inputRef.current]
+    [reset]
   );
 
   useEffect(() => {
