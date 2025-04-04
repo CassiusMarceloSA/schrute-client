@@ -1,10 +1,11 @@
+import { aiService } from "@/services";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useMutation } from "@tanstack/react-query";
+import { WandSparkles } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import { Button, Input, Textarea } from "../shared";
-import { WandSparkles } from "lucide-react";
-import { useMutation } from "@tanstack/react-query";
-import { aiService } from "@/services";
+import { Button } from "../shared";
+import Field from "./field";
 
 const DEFAULT_DURATION = 15;
 
@@ -60,7 +61,7 @@ export const TaskForm = ({ isAdding, ...props }: FormProps) => {
         onSubmit={form.handleSubmit(onSubmit)}
         className="flex flex-col gap-4"
       >
-        <Input
+        <Field
           {...form.register("title")}
           error={getFieldError("title")}
           label="Title"
@@ -68,7 +69,8 @@ export const TaskForm = ({ isAdding, ...props }: FormProps) => {
           disabled={isAdding}
         />
         <div>
-          <Textarea
+          <Field
+            asTextArea
             {...form.register("description")}
             error={getFieldError("description")}
             label="Description"
@@ -84,7 +86,7 @@ export const TaskForm = ({ isAdding, ...props }: FormProps) => {
             Enhance text
           </Button>
         </div>
-        <Input
+        <Field
           {...form.register("duration")}
           error={getFieldError("duration")}
           type="number"

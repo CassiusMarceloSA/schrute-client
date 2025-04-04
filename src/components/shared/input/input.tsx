@@ -1,35 +1,43 @@
-import { CircleAlert } from "lucide-react";
-
 type Props = React.InputHTMLAttributes<HTMLInputElement> & {
-  label?: string;
   name: string;
-  error?: string;
+  asTextArea?: boolean;
+  rows?: number;
 };
 
-function Input({ label, error, ...props }: Props) {
-  return (
-    <div className="flex flex-col justify-center items-start gap-1">
-      <label
-        className={`text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 ${
-          !!error ? "text-destructive text-red-500" : ""
-        }`}
-        htmlFor={props.name}
-      >
-        {label}
-      </label>
-      <input
-        className="flex h-9 text-neutral-50 w-full rounded-md border border-neutral-700 placeholder:text-neutral-500 placeholder:text-sm bg-transparent px-3 py-1 text-base shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
-        id={props.name}
-        {...props}
-      />
-      {error && (
-        <p className="text-[0.8rem] font-medium text-destructive text-red-500 flex gap-1 items-center">
-          <CircleAlert size={14} />
-          {error}
-        </p>
-      )}
-    </div>
-  );
-}
+export const Wrapper = ({ children }: { children: React.ReactNode }) => (
+  <div className="flex flex-col justify-center items-start gap-1">
+    {children}
+  </div>
+);
 
-export default Input;
+export const Container = ({ children }: { children: React.ReactNode }) => (
+  <div className="flex min-h-9 text-neutral-50 w-full rounded-md border border-neutral-700  bg-transparent px-3 py-1 text-base shadow-sm transition-colors">
+    {children}
+  </div>
+);
+
+export const Field = ({
+  name,
+  ...props
+}: React.InputHTMLAttributes<HTMLInputElement> & Props) => {
+  const commonClasses =
+    "w-full outline-0 placeholder:text-neutral-500 placeholder:text-sm bg-transparent file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground disabled:cursor-not-allowed disabled:opacity-50";
+
+  if (props.asTextArea) {
+    const textAreaProps =
+      props as React.TextareaHTMLAttributes<HTMLTextAreaElement>;
+    return (
+      <textarea
+        className={`${commonClasses} resize-none scrollbar-hide`}
+        id={name}
+        name={name}
+        rows={3}
+        {...textAreaProps}
+      />
+    );
+  }
+
+  return (
+    <input className={`${commonClasses}`} id={name} name={name} {...props} />
+  );
+};

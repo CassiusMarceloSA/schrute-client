@@ -28,7 +28,6 @@ const ColumnLoader = () => {
     <div className="flex flex-col gap-2 w-full">
       <Skeleton className="bg-neutral-800 h-32 w-full mt-2 mb-3" />
       <Skeleton className="bg-neutral-800 h-32 w-full mt-2 mb-3" />
-      <Skeleton className="bg-neutral-800 h-32 w-full mt-2 mb-3" />
     </div>
   );
 };
