@@ -1,7 +1,5 @@
-import { useDebounce } from "@/hooks";
+import { useDebounce, useFetchTasks } from "@/hooks";
 import { cn } from "@/lib/utils";
-import { taskService } from "@/services";
-import { useQuery } from "@tanstack/react-query";
 import { Search } from "lucide-react";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { Input } from "../shared";
@@ -35,17 +33,12 @@ const SearchBar = () => {
   const [term, setTerm] = useState("");
   const debouncedQuery = useDebounce(term, 500);
   const inputRef = useRef<HTMLInputElement>(null);
-  const fetchTasks = async (query?: string) => {
-    const { tasks } = await taskService.getTasks(query);
-    return tasks;
-  };
 
-  const { data: tasks, refetch } = useQuery({
-    queryKey: ["filtered-tasks", debouncedQuery],
-    queryFn: () => fetchTasks(debouncedQuery),
-    refetchOnWindowFocus: false,
+  const { data: tasks, refetch } = useFetchTasks({ 
     enabled: false,
-  });
+    query: debouncedQuery,
+    queryKey: "filtered-tasks"
+  })
 
   const handleChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     setTerm(e.target.value);
