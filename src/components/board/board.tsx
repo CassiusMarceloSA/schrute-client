@@ -3,27 +3,20 @@ import { ColumnEnum } from "@/models";
 import { taskService } from "@/services";
 import { useBoardStore } from "@/store";
 import { TW_BOARD_COLORS } from "@/utils";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation } from "@tanstack/react-query";
 import { Column } from ".";
 import { CreateTaskPayload } from "@/app/api/tasks/models";
+import { useFetchTasks } from "@/hooks";
 
 const Board = () => {
   const { board, setColumn, setBoard } = useBoardStore();
-  const fetchTasks = async () => {
-    const { tasks } = await taskService.getTasks();
-    setBoard(tasks);
-    return tasks;
-  };
-
+  const { refetch, isFetching, isLoading } = useFetchTasks({ 
+    select: setBoard
+  })
   const updateTask = async (id: string, status: ColumnEnum) => {
     await taskService.updateTaskStatus(id, status);
   };
 
-  const { refetch, isFetching, isLoading } = useQuery({
-    queryKey: ["tasks"],
-    queryFn: fetchTasks,
-    refetchOnWindowFocus: false,
-  });
 
   const { mutate: updateTaskMutation, isPending: isUpdating } = useMutation({
     mutationFn: ({ id, status }: { id: string; status: ColumnEnum }) =>
