@@ -1,8 +1,8 @@
 import { Loader } from "@/components/shared";
 import { ColumnEnum } from "@/models";
-import { taskService } from "@/services";
+import { taskService, telegramService } from "@/services";
 import { useBoardStore } from "@/store";
-import { TW_BOARD_COLORS } from "@/utils";
+import { formatDate, TW_BOARD_COLORS } from "@/utils";
 import { useMutation } from "@tanstack/react-query";
 import { Column } from ".";
 import { CreateTaskPayload } from "@/app/api/tasks/models";
@@ -10,13 +10,12 @@ import { useFetchTasks } from "@/hooks";
 
 const Board = () => {
   const { board, setColumn, setBoard } = useBoardStore();
-  const { refetch, isFetching, isLoading } = useFetchTasks({ 
-    select: setBoard
-  })
+  const { refetch, isFetching, isLoading } = useFetchTasks({
+    select: setBoard,
+  });
   const updateTask = async (id: string, status: ColumnEnum) => {
     await taskService.updateTaskStatus(id, status);
   };
-
 
   const { mutate: updateTaskMutation, isPending: isUpdating } = useMutation({
     mutationFn: ({ id, status }: { id: string; status: ColumnEnum }) =>
@@ -26,9 +25,19 @@ const Board = () => {
     },
   });
 
+  const { mutate: sendTelegramMessage } = useMutation({
+    mutationFn: telegramService.sendMessage,
+    onSuccess: () => alert("Message sent successfully"),  
+  });
+
   const { mutate: addTaskMutation, isPending: isAdding } = useMutation({
     mutationFn: (payload: CreateTaskPayload) => taskService.createTask(payload),
-    onSuccess: () => {
+    onSuccess: (data) => {
+      sendTelegramMessage({
+        title: data.title,
+        description: data.description,
+        createdAt: formatDate(data.$createdAt),
+      });
       refetch();
     },
   });
