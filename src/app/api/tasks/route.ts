@@ -1,14 +1,15 @@
 import { databases } from "@/lib/appwrite";
-import { NextRequest, NextResponse } from "next/server";
-import { validateCreateTask } from "./validators";
-import { sanitizeTaskList } from "./parser";
-import { toResult } from "@/utils";
+import { telegramRequest, telegramUtils, toResult } from "@/utils";
 import { Query } from "appwrite";
+import { NextRequest, NextResponse } from "next/server";
+import { sanitizeTaskList } from "./parser";
+import { validateCreateTask } from "./validators";
 
 const databaseId = process.env.APPWRITE_DATABASE_ID || "";
 const collectionId = process.env.APPWRITE_COLLECTION_ID || "";
+const TELEGRAM_CHANNEL_ID = process.env.TELEGRAM_CHANNEL_ID || "";
 
-if (!databaseId || !collectionId) {
+if (!databaseId || !collectionId || !TELEGRAM_CHANNEL_ID) {
   throw new Error("Missing environment variables");
 }
 
@@ -50,6 +51,21 @@ export async function POST(req: NextRequest) {
 
   if (creationError) {
     return NextResponse.json(creationError, { status: 500 });
+  }
+  const { TELEGRAM_ACTIONS, messageContent } = telegramUtils;
+  const [telegramError] = await toResult(
+    telegramRequest.post(TELEGRAM_ACTIONS.SEND_MESSAGE, {
+      chat_id: TELEGRAM_CHANNEL_ID,
+      text: messageContent({
+        title,
+        description,
+        date: document.$createdAt,
+      }),
+    })
+  );
+
+  if (telegramError) {
+    console.error("Failed to send Telegram notification:", telegramError);
   }
 
   return NextResponse.json(document);

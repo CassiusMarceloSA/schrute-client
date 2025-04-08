@@ -1,6 +1,6 @@
 import { Loader } from "@/components/shared";
 import { ColumnEnum } from "@/models";
-import { taskService, telegramService } from "@/services";
+import { taskService } from "@/services";
 import { useBoardStore } from "@/store";
 import { formatDate, TW_BOARD_COLORS } from "@/utils";
 import { useMutation } from "@tanstack/react-query";
@@ -25,19 +25,9 @@ const Board = () => {
     },
   });
 
-  const { mutate: sendTelegramMessage } = useMutation({
-    mutationFn: telegramService.sendMessage,
-    onSuccess: () => alert("Message sent successfully"),  
-  });
-
   const { mutate: addTaskMutation, isPending: isAdding } = useMutation({
     mutationFn: (payload: CreateTaskPayload) => taskService.createTask(payload),
-    onSuccess: (data) => {
-      sendTelegramMessage({
-        title: data.title,
-        description: data.description,
-        createdAt: formatDate(data.$createdAt),
-      });
+    onSuccess: () => {
       refetch();
     },
   });
