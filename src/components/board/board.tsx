@@ -2,7 +2,7 @@ import { Loader } from "@/components/shared";
 import { ColumnEnum } from "@/models";
 import { taskService } from "@/services";
 import { useBoardStore } from "@/store";
-import { formatDate, TW_BOARD_COLORS } from "@/utils";
+import { TW_BOARD_COLORS } from "@/utils";
 import { useMutation } from "@tanstack/react-query";
 import { Column } from ".";
 import { CreateTaskPayload } from "@/app/api/tasks/models";
