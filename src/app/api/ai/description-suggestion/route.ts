@@ -39,4 +39,4 @@ export async function POST(req: Request) {
   }
 
   return new Response(response.choices[0].message.content);
-}
+} 
