@@ -1,36 +1,103 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Schrute Client
+
+A modern task management application built with Next.js, featuring AI integration and Telegram notifications.
+
+## Features
+
+- Task management with drag-and-drop functionality
+- AI-powered task assistance
+- Telegram integration for notifications
+- Modern UI with Tailwind CSS and shadcn/ui components
+- Type-safe development with TypeScript
+- State management with Zustand
+- Form handling with React Hook Form and Zod validation
+- API integration with Appwrite
+
+## Tech Stack
+
+- **Framework**: Next.js 15
+- **Language**: TypeScript
+- **Styling**: Tailwind CSS
+- **UI Components**: shadcn/ui (built on Radix UI)
+- **State Management**: Zustand
+- **Form Handling**: React Hook Form + Zod
+- **API Client**: Appwrite
+- **AI Integration**: OpenAI
+- **Messaging**: Telegram
+- **Data Fetching**: TanStack Query
 
 ## Getting Started
 
-First, run the development server:
+### Prerequisites
 
+- Node.js (latest LTS version recommended)
+- Yarn or npm
+- Telegram Bot Token
+- OpenAI API Key
+- Appwrite Project Configuration
+
+### Environment Setup
+
+1. Copy the environment variables:
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+cp .env.example .env.local
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+2. Update the `.env.local` file with your API keys and configuration:
+```
+TELEGRAM_BOT_TOKEN=your_telegram_bot_token
+OPENAI_API_KEY=your_openai_api_key
+APPWRITE_ENDPOINT=your_appwrite_endpoint
+APPWRITE_PROJECT_ID=your_project_id
+```
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### Installation
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+1. Install dependencies:
+```bash
+yarn install
+# or
+npm install
+```
 
-## Learn More
+2. Run the development server:
+```bash
+yarn dev
+# or
+npm run dev
+```
 
-To learn more about Next.js, take a look at the following resources:
+3. Open [http://localhost:3000](http://localhost:3000) in your browser
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Available Scripts
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- `yarn dev` - Start development server
+- `yarn build` - Build for production
+- `yarn start` - Start production server
+- `yarn lint` - Run ESLint
+- `yarn build:verify` - Verify build with linting
 
-## Deploy on Vercel
+## Project Structure
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+```
+src/
+├── app/              # Next.js app router pages
+├── components/       # Reusable UI components
+├── services/         # API and external service integrations
+│   ├── ai/          # OpenAI integration
+│   ├── task/        # Task management
+│   └── telegram/    # Telegram bot integration
+└── types/           # TypeScript type definitions
+```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Contributing
+
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add some amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
+
+## License
+
+This project is licensed under the MIT License - see the LICENSE file for details.
