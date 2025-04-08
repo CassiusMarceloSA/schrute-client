@@ -1,12 +1,6 @@
 import axios from "axios";
 import { formatDate } from ".";
 
-const TELEGRAM_BOT_TOKEN = process.env.TELEGRAM_BOT_TOKEN || "";
-
-if (!TELEGRAM_BOT_TOKEN) {
-  throw new Error("Missing environment variables");
-}
-
 export const buildTelegramURL = (token: string) => {
   return `https://api.telegram.org/bot${token}/`;
 };
@@ -32,12 +26,13 @@ export const messageContent = ({
       `.trim();
 };
 
-const telegramRequest = axios.create({
-  baseURL: buildTelegramURL(TELEGRAM_BOT_TOKEN),
-});
+const createTelegramRequest = (botToken: string) =>
+  axios.create({
+    baseURL: buildTelegramURL(botToken),
+  });
 
 export const TELEGRAM_ACTIONS = {
   SEND_MESSAGE: "sendMessage",
 };
 
-export default telegramRequest;
+export default createTelegramRequest;

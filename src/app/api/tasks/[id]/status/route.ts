@@ -1,13 +1,19 @@
 import { databases } from "@/lib/appwrite";
-import { telegramRequest, telegramUtils, toResult } from "@/utils";
+import { createTelegramRequest, telegramUtils, toResult } from "@/utils";
 import { NextResponse } from "next/server";
 import { validateUpdateStatus } from "../../validators";
 
 const databaseId = process.env.APPWRITE_DATABASE_ID || "";
 const collectionId = process.env.APPWRITE_COLLECTION_ID || "";
 const TELEGRAM_CHANNEL_ID = process.env.TELEGRAM_CHANNEL_ID || "";
+const TELEGRAM_BOT_TOKEN = process.env.TELEGRAM_BOT_TOKEN || "";
 
-if (!databaseId || !collectionId) {
+if (
+  !databaseId ||
+  !collectionId ||
+  !TELEGRAM_CHANNEL_ID ||
+  !TELEGRAM_BOT_TOKEN
+) {
   throw new Error("Missing environment variables");
 }
 
@@ -35,6 +41,7 @@ export async function PUT(
   }
 
   const { TELEGRAM_ACTIONS, messageContent } = telegramUtils;
+  const telegramRequest = createTelegramRequest(TELEGRAM_BOT_TOKEN);
   const [telegramError] = await toResult(
     telegramRequest.post(TELEGRAM_ACTIONS.SEND_MESSAGE, {
       chat_id: TELEGRAM_CHANNEL_ID,
