@@ -13,8 +13,8 @@ import {
 type Props = {
   children: React.ReactNode;
   title: string;
-  description: string;
-  buttonContent: React.ReactNode;
+  description: React.ReactNode;
+  buttonContent?: React.ReactNode;
   open: boolean;
   updateOpen: (open: boolean) => void;
 };
@@ -23,13 +23,17 @@ export function Modal(props: Props) {
   const ButtonContent = props.buttonContent;
   return (
     <Dialog onOpenChange={props.updateOpen} open={props.open}>
-      <DialogTrigger asChild>
-        <Button>{ButtonContent}</Button>
-      </DialogTrigger>
+      {ButtonContent && (
+        <DialogTrigger asChild>
+          <Button>{ButtonContent}</Button>
+        </DialogTrigger>
+      )}
       <DialogContent className="sm:max-w-md text-neutral-300 bg-neutral-800 border-neutral-700">
         <DialogHeader>
           <DialogTitle className="text-neutral-300">{props.title}</DialogTitle>
-          <DialogDescription className="text-neutral-400" >{props.description}</DialogDescription>
+          <DialogDescription className="text-neutral-400">
+            {props.description}
+          </DialogDescription>
         </DialogHeader>
         {props.children}
       </DialogContent>
