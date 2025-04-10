@@ -1,4 +1,4 @@
-import { Badge } from "@/components/shared";
+import { Badge, badgeVariants } from "@/components/shared";
 import { ColumnEnum, Task } from "@/models";
 import { TW_BOARD_COLORS } from "@/utils";
 
@@ -12,7 +12,7 @@ export const SearchItem = ({ task, handleClick }: Props) => {
   const color = TW_BOARD_COLORS[BOARD_ORDER.indexOf(task.status)].replace(
     "-500",
     ""
-  ) as any;
+  ) as keyof typeof badgeVariants;
   return (
     <li
       onClick={handleClick}
