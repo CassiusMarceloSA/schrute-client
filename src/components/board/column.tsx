@@ -1,14 +1,14 @@
+import { CreateTaskPayload } from "@/app/api/tasks/models";
 import { ColumnEnum, Column as ColumnType, Task as TaskType } from "@/models";
 import { useBoardStore } from "@/store";
 import { TwBackgroundColor, TwBorderColor, Color as TwColor } from "@/utils";
 import { useState } from "react";
 import { TaskFormModal } from "../task-form";
+import { TaskModal } from "../task-modal";
 import { Skeleton } from "../ui/skeleton";
 import DropIndicator from "./drop-indicator";
 import Task from "./task";
 import { getIndicators, getNearestIndicator, reorder } from "./utils";
-import { CreateTaskPayload } from "@/app/api/tasks/models";
-
 type DragEvent = React.DragEvent<HTMLDivElement>;
 
 type ColumnProps = {
@@ -44,6 +44,8 @@ const Column = ({
   isAdding = false,
 }: ColumnProps) => {
   const [active, setActive] = useState(false);
+  const [openTaskModal, setOpenTaskModal] = useState(false);
+  const [selectedTask, setSelectedTask] = useState<TaskType | null>(null);
   const { draggedItem, setDraggedItem } = useBoardStore();
   const indicatorColor = `bg-${color}` satisfies TwBackgroundColor;
   const borderColor = `border-${color}` satisfies TwBorderColor;
@@ -52,6 +54,11 @@ const Column = ({
     bg: active ? "bg-neutral-800/50" : "bg-neutral-800/0",
     border: active ? borderColor : "border-neutral-700",
     height: cards.length ? "h-auto" : "h-fit",
+  };
+
+  const handleTaskModal = (task: TaskType | null, isOpen: boolean) => {
+    setSelectedTask(task);
+    setOpenTaskModal(isOpen);
   };
 
   const updateColumn = (cards: TaskType[]) => {
@@ -117,6 +124,11 @@ const Column = ({
         </span>
       </div>
       <TaskFormModal isAdding={isAdding} closeAfterSubmit onSubmit={addTask} />
+      <TaskModal
+        task={selectedTask}
+        open={openTaskModal}
+        onOpenChange={() => handleTaskModal(null, false)}
+      />
       {isLoading ? (
         <ColumnLoader />
       ) : (
@@ -127,7 +139,12 @@ const Column = ({
           className={`h-full w-full overflow-auto scrollbar-hide`}
         >
           {cards.map((card) => (
-            <Task key={card.id} item={card} handleDragStart={handleDragStart} />
+            <Task
+              key={card.id}
+              item={card}
+              handleDragStart={handleDragStart}
+              handleClick={() => handleTaskModal(card, true)}
+            />
           ))}
           <DropIndicator fullHeight beforeId="-1" column={column} />
         </div>

@@ -1,5 +1,5 @@
 import { Task } from "@/models";
-import { Models } from 'appwrite'
+import { Models } from "appwrite";
 
 export function sanitizeTaskList(documentsList: Models.Document[]): Task[] {
   return documentsList.map((item) => ({
@@ -8,6 +8,7 @@ export function sanitizeTaskList(documentsList: Models.Document[]): Task[] {
     description: item.description,
     status: item.status,
     duration: item.duration,
-    createdAt: new Date(item.$createdAt),
+    createdAt: item.$createdAt,
+    updatedAt: item.$updatedAt,
   }));
 }

@@ -1,4 +1,7 @@
-export default function format(date: string): string {
+export default function format(
+  date: string,
+  options?: Intl.DateTimeFormatOptions
+): string {
   const dateObj = new Date(date);
   return Intl.DateTimeFormat("pt-br", {
     year: "numeric",
@@ -6,5 +9,6 @@ export default function format(date: string): string {
     day: "numeric",
     minute: "numeric",
     hour: "numeric",
+    ...options,
   }).format(dateObj);
 }
