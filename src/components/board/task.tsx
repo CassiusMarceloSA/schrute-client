@@ -6,6 +6,7 @@ import { getColumnColor } from "./utils";
 type Props = {
   item: TaskType;
   handleDragStart: (e: React.DragEvent<HTMLDivElement>, item: TaskType) => void;
+  handleClick: () => void;
   isDraggable?: boolean;
   showDescription?: boolean;
 };
@@ -36,6 +37,7 @@ const Card = ({ isDraggable = true, ...props }: Props) => {
         }}
         onDragEnd={() => setDragging(false)}
         className={`rounded-sm border overflow-hidden p-3  my-1 ${border} ${bg} ${cursor}`}
+        onClick={props.handleClick}
       >
         <p className={` text-neutral-100 my-2 ${textSize}`}>
           {props.item?.title}
