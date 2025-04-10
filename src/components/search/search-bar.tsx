@@ -4,6 +4,8 @@ import { Search } from "lucide-react";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { Input } from "../shared";
 import { SearchContent } from "./search-content";
+import { Task } from "@/models";
+import { TaskModal } from "../task-modal/task-modal";
 
 const Overlay = ({
   active,
@@ -30,15 +32,17 @@ const Overlay = ({
 
 const SearchBar = () => {
   const [active, setActive] = useState(false);
+  const [selectedTask, setSelectedTask] = useState<Task | null>(null);
+  const [openTaskModal, setOpenTaskModal] = useState(false);
   const [term, setTerm] = useState("");
   const debouncedQuery = useDebounce(term, 500);
   const inputRef = useRef<HTMLInputElement>(null);
 
-  const { data: tasks, refetch } = useFetchTasks({ 
+  const { data: tasks, refetch } = useFetchTasks({
     enabled: false,
     query: debouncedQuery,
-    queryKey: "filtered-tasks"
-  })
+    queryKey: "filtered-tasks",
+  });
 
   const handleChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     setTerm(e.target.value);
@@ -47,6 +51,16 @@ const SearchBar = () => {
   const handleActive = () => {
     if (active) return;
     setActive(true);
+  };
+
+  const handleSelectedTask = (task: Task) => {
+    setSelectedTask(task);
+    setOpenTaskModal(true);
+  };
+
+  const resetSelectedTask = () => {
+    setSelectedTask(null);
+    setOpenTaskModal(false);
   };
 
   const reset = useCallback(() => {
@@ -105,7 +119,15 @@ const SearchBar = () => {
           }
         }}
       >
-        <SearchContent tasks={tasks || []} />
+        <SearchContent
+          tasks={tasks || []}
+          setSelectedTask={handleSelectedTask}
+        />
+        <TaskModal
+          task={selectedTask}
+          open={openTaskModal}
+          onOpenChange={resetSelectedTask}
+        />
       </Overlay>
       <Input.Container
         className={cn("w-auto", {
