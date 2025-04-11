@@ -21,7 +21,7 @@ const AddCard = (props: Props) => {
       title: text,
       status: props.column,
       description: "",
-      createdAt: new Date(),
+      createdAt: new Date().toISOString(),
       duration: 30,
     } satisfies Task;
 
