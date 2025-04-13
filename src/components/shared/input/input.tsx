@@ -29,12 +29,13 @@ export const Container = ({
 export const Field = ({
   name,
   className,
+  asTextArea,
   ...props
 }: React.InputHTMLAttributes<HTMLInputElement> & Props) => {
   const commonClasses =
     "w-full outline-0 placeholder:text-neutral-500 placeholder:text-sm bg-transparent file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground disabled:cursor-not-allowed disabled:opacity-50";
 
-  if (props.asTextArea) {
+  if (asTextArea) {
     const textAreaProps =
       props as React.TextareaHTMLAttributes<HTMLTextAreaElement>;
     const textAreaClasses = "resize-none scrollbar-hide";

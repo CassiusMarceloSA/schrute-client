@@ -26,4 +26,7 @@ export async function createTask(payload: CreateTaskPayload) {
 }
 
 export async function updateTask() {}
-export async function deleteTask() {}
+export async function deleteTask(id: string) {
+  const { data } = await request.delete(`/tasks/${id}`);
+  return data;
+}

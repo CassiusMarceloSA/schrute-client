@@ -127,7 +127,7 @@ const Column = ({
       <TaskModal
         task={selectedTask}
         open={openTaskModal}
-        onOpenChange={() => handleTaskModal(null, false)}
+        onClose={() => handleTaskModal(null, false)}
       />
       {isLoading ? (
         <ColumnLoader />

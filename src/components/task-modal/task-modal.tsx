@@ -1,17 +1,39 @@
+import { useFetchTasks } from "@/hooks";
 import { ColumnEnum, Task } from "@/models";
+import { taskService } from "@/services";
+import { useBoardStore } from "@/store";
 import { TW_BOARD_COLORS } from "@/utils";
 import format from "@/utils/date-formatter";
+import { useMutation } from "@tanstack/react-query";
 import { Calendar, CircleDashed, Text, Trash } from "lucide-react";
+import { useState } from "react";
 import { Button, Modal } from "../shared";
 
 type Props = {
   task: Task | null;
   open: boolean;
-  onOpenChange: (open: boolean) => void;
+  onClose: () => void;
 };
 const BOARD_ORDER = ["backlog", "todo", "doing", "done"] satisfies ColumnEnum[];
 
-export function TaskModal({ task, open, onOpenChange }: Props) {
+export function TaskModal({ task, open, onClose }: Props) {
+  const [isDeleting, setIsDeleting] = useState(false);
+  const { setBoard } = useBoardStore();
+
+  const { refetch } = useFetchTasks({
+    select: setBoard,
+    enabled: false,
+  });
+
+  const { mutate: deleteTaskMutation, isPending } = useMutation({
+    mutationFn: () => taskService.deleteTask(task?.id || ""),
+    onSuccess: () => {
+      refetch();
+      setIsDeleting(false);
+      onClose();
+    },
+  });
+
   if (!task) return null;
   const color = TW_BOARD_COLORS[BOARD_ORDER.indexOf(task.status)].replace(
     "500",
@@ -21,7 +43,7 @@ export function TaskModal({ task, open, onOpenChange }: Props) {
   return (
     <Modal.Content
       open={open}
-      updateOpen={onOpenChange}
+      updateOpen={onClose}
       title={task.title}
       description={
         <>
@@ -73,11 +95,39 @@ export function TaskModal({ task, open, onOpenChange }: Props) {
         </div>
 
         <div className="col-span-1 flex items-end">
-          <Button className="w-full flex gap-2" size="sm" variant="destructive">
+          <Button
+            className="w-full flex gap-2 border-destructive text-destructive bg-transparent hover:bg-destructive"
+            onClick={() => setIsDeleting(true)}
+            size="sm"
+            variant="outline"
+          >
             <Trash size={14} />
             Delete
           </Button>
         </div>
+        {isDeleting && (
+          <Modal.Content
+            open={isDeleting}
+            updateOpen={() => setIsDeleting(false)}
+            title="Delete Task"
+            description="Are you sure you want to delete this task?"
+          >
+            <div className="flex flex-col gap-2">
+              <div className="flex justify-between">
+                <Button variant="ghost" onClick={() => setIsDeleting(false)}>
+                  Cancel
+                </Button>
+                <Button
+                  variant="destructive"
+                  onClick={() => deleteTaskMutation()}
+                  disabled={isPending}
+                >
+                  Confirm
+                </Button>
+              </div>
+            </div>
+          </Modal.Content>
+        )}
       </div>
     </Modal.Content>
   );
