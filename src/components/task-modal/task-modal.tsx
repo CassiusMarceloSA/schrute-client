@@ -26,7 +26,7 @@ export function TaskModal({ task, open, onClose }: Props) {
   });
 
   const { mutate: deleteTaskMutation, isPending } = useMutation({
-    mutationFn: () => taskService.deleteTask(task?.id!),
+    mutationFn: () => taskService.deleteTask(task?.id || ""),
     onSuccess: () => {
       refetch();
       setIsDeleting(false);
