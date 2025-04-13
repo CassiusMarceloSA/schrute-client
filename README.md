@@ -1,4 +1,4 @@
-# Schrute Client
+# ManagemateAI
 
 A modern task management application built with Next.js, featuring AI integration and Telegram notifications.
 
@@ -39,11 +39,13 @@ A modern task management application built with Next.js, featuring AI integratio
 ### Environment Setup
 
 1. Copy the environment variables:
+
 ```bash
 cp .env.example .env.local
 ```
 
 2. Update the `.env.local` file with your API keys and configuration:
+
 ```
 TELEGRAM_BOT_TOKEN=your_telegram_bot_token
 OPENAI_API_KEY=your_openai_api_key
@@ -54,6 +56,7 @@ APPWRITE_PROJECT_ID=your_project_id
 ### Installation
 
 1. Install dependencies:
+
 ```bash
 yarn install
 # or
@@ -61,6 +64,7 @@ npm install
 ```
 
 2. Run the development server:
+
 ```bash
 yarn dev
 # or
