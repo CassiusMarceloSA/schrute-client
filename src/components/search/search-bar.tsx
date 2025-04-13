@@ -126,7 +126,7 @@ const SearchBar = () => {
         <TaskModal
           task={selectedTask}
           open={openTaskModal}
-          onOpenChange={resetSelectedTask}
+          onClose={resetSelectedTask}
         />
       </Overlay>
       <Input.Container
