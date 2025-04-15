@@ -49,7 +49,7 @@ export const BoardInsights = () => {
       </h3>
       {analysis || isGenerating ? (
         <div className="flex gap-4 text-sm text-neutral-300">
-          <div className="flex flex-col gap-4">
+          <div className="flex flex-col gap-4 w-1/2">
             <div className="flex flex-col gap-1">
               <h4 className="font-semibold">Board Status</h4>
               {isGenerating ? (
@@ -69,7 +69,7 @@ export const BoardInsights = () => {
             </div>
           </div>
 
-          <div className="flex flex-col gap-1">
+          <div className="flex flex-col gap-1 w-1/2">
             <h4 className="font-semibold">Recommendations</h4>
             <ul className="list-disc list-inside space-y-1 text-neutral-400">
               {isGenerating ? (
