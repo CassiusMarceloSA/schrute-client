@@ -1,3 +1,4 @@
+import { Board } from "@/models";
 import { request } from "@/utils";
 
 export async function generateDescriptionSuggestion(
@@ -11,4 +12,7 @@ export async function generateDescriptionSuggestion(
   return data.content;
 }
 
-// export
+export async function generateBoardAnalysis(board: Board) {
+  const { data } = await request.post("/ai/board-analysis", { board });
+  return data;
+}
