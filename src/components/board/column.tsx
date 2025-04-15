@@ -112,7 +112,7 @@ const Column = ({
 
   return (
     <div
-      className={`w-56 gap-2 border border-neutral-600 rounded-lg px-4 transition-colors shrink-0 py-3 flex flex-col ${styles.bg} ${styles.border} ${styles.height}`}
+      className={`w-60 gap-2 border border-neutral-600 rounded-lg px-4 transition-colors shrink-0 py-3 flex flex-col ${styles.bg} ${styles.border} ${styles.height}`}
     >
       <div className="mb-3 flex items-center justify-between gap-4 px-2">
         <h3 className={`font-medium flex gap-2 items-center`}>

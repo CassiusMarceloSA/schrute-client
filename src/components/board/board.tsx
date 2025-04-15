@@ -7,6 +7,7 @@ import { useMutation } from "@tanstack/react-query";
 import { Column } from ".";
 import { CreateTaskPayload } from "@/app/api/tasks/models";
 import { useFetchTasks } from "@/hooks";
+import { BoardInsights } from "./board-insights";
 
 const Board = () => {
   const { board, setColumn, setBoard } = useBoardStore();
@@ -37,25 +38,28 @@ const Board = () => {
   const isRefetching = !isLoading && (isFetching || isUpdating);
 
   return (
-    <div className="h-full px-8 overflow-hidden text-neutral-200 rounded-lg">
+    <div className="h-full overflow-hidden text-neutral-200 rounded-lg">
       {isRefetching && <Loader />}
-      <div className="flex justify-center h-full w-full gap-3 py-8">
-        {columns.map((item, index) => (
-          <Column
-            isLoading={isLoading}
-            key={item.id}
-            column={item.id}
-            title={item.id}
-            color={TW_BOARD_COLORS[index]}
-            cards={item.tasks}
-            setColumn={setColumn}
-            updateCardStatus={(taskId, status) =>
-              updateTaskMutation({ id: taskId, status })
-            }
-            addTask={addTaskMutation}
-            isAdding={isAdding}
-          />
-        ))}
+      <div className="grid grid-cols-12 gap-4 h-full py-8">
+        <BoardInsights />
+        <div className="flex justify-between col-span-8 h-full w-full gap-3">
+          {columns.map((item, index) => (
+            <Column
+              isLoading={isLoading}
+              key={item.id}
+              column={item.id}
+              title={item.id}
+              color={TW_BOARD_COLORS[index]}
+              cards={item.tasks}
+              setColumn={setColumn}
+              updateCardStatus={(taskId, status) =>
+                updateTaskMutation({ id: taskId, status })
+              }
+              addTask={addTaskMutation}
+              isAdding={isAdding}
+            />
+          ))}
+        </div>
       </div>
     </div>
   );
