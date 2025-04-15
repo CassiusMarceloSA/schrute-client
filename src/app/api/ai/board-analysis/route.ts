@@ -1,6 +1,25 @@
 import { openai } from "@/lib/openai";
-import { toResult } from "@/utils";
-import { Board } from "@/models";
+import { generateHash, toResult } from "@/utils";
+import { Board, Column } from "@/models";
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+const dailySuggestion = new Map<string, any>();
+
+const generateMapId = (value: string) => {
+  return generateHash(value);
+};
+
+const buildIdentifier = (columns: Column[]) => {
+  let stringIdentifier = "";
+
+  for (let key in columns) {
+    stringIdentifier += `-${columns[key].id}-${columns[key].tasks.length}`;
+  }
+
+  const today = new Date().toLocaleDateString();
+
+  return stringIdentifier + today;
+};
 
 const roleDescription = `
 Como um analista especializado em gestão de tarefas Kanban, você deve analisar o estado atual do quadro e fornecer insights valiosos.
@@ -32,17 +51,12 @@ const generatePromptContent = (board: Board) => {
   3. Recomendações específicas baseadas nos dados
   4. Percentual com estado das tarefas
 
-  A resposta deve seguir o formato JSON com as seguintes propriedades:
-  {
-    "status": "string com o status geral do quadro",
-    "distribution": "string com análise da distribuição",
-    "recommendations": "array de strings com recomendações específicas",
-    "statistics": { 
-      "done": "percentual de tarefas concluídas",
-      "in_progress": "percentual de tarefas em andamento",
-      "pending": "percentual de tarefas nao iniciadas (todo, backlog, etc)"
-    }
-  }
+  A resposta deve ser um JSON com as seguintes propriedades:
+  "status": string com o status geral do quadro,
+  "distribution": string com análise da distribuição,
+  "recommendations": array de strings com recomendações específicas
+
+  Garanta que a resposta seja um JSON válido e não um JSON string.
   `;
 };
 
@@ -52,6 +66,13 @@ export async function POST(req: Request) {
 
   if (!board) {
     return new Response("No board data in the request", { status: 400 });
+  }
+
+  const stringIdentifier = buildIdentifier(board.columns);
+  const mapIdentifier = generateMapId(stringIdentifier);
+
+  if (dailySuggestion.has(mapIdentifier)) {
+    return new Response(dailySuggestion.get(mapIdentifier));
   }
 
   const [promptError, response] = await toResult(
@@ -68,5 +89,6 @@ export async function POST(req: Request) {
     return new Response(promptError.message, { status: 500 });
   }
 
+  dailySuggestion.set(mapIdentifier, response.choices[0].message.content);
   return new Response(response.choices[0].message.content);
 }
