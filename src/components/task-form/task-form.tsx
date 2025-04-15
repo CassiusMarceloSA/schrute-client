@@ -28,7 +28,7 @@ export const TaskForm = ({ isAdding, ...props }: FormProps) => {
       description: "",
       duration: DEFAULT_DURATION,
     },
-    reValidateMode: "onSubmit"
+    reValidateMode: "onSubmit",
   });
 
   function onSubmit(values: z.infer<typeof formSchema>) {
@@ -43,7 +43,10 @@ export const TaskForm = ({ isAdding, ...props }: FormProps) => {
   const { mutate: aiGenerateMutation, isPending: isAiGenerating } = useMutation(
     {
       mutationFn: () =>
-        aiService.getAiResponse(form.watch("description"), form.watch("title")),
+        aiService.generateDescriptionSuggestion(
+          form.watch("description"),
+          form.watch("title")
+        ),
       onSuccess: (data) => {
         form.setValue("description", data);
       },

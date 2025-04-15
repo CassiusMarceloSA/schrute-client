@@ -5,3 +5,4 @@ export { default as request } from "./request";
 export { default as formatDate } from "./date-formatter";
 export * as telegramUtils from "./telegram-request";
 export { default as createTelegramRequest } from "./telegram-request";
+export { generateHash } from "./hash";
