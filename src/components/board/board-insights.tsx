@@ -76,7 +76,9 @@ export const BoardInsights = () => {
                 <ListSkeleton />
               ) : (
                 analysis?.recommendations?.map((rec, index) => (
-                  <li key={index}>{rec}</li>
+                  <li className="marker:text-purple-500" key={index}>
+                    {rec}
+                  </li>
                 ))
               )}
             </ul>

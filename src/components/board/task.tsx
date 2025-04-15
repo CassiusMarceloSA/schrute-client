@@ -36,7 +36,7 @@ const Card = ({ isDraggable = true, ...props }: Props) => {
           setDragging(true);
         }}
         onDragEnd={() => setDragging(false)}
-        className={`rounded-sm border overflow-hidden p-3  my-1 ${border} ${bg} ${cursor}`}
+        className={`rounded-sm border overflow-hidden p-3 w-full my-1 ${border} ${bg} ${cursor}`}
         onClick={props.handleClick}
       >
         <p className={` text-neutral-100 my-2 ${textSize}`}>
