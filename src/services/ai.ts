@@ -12,7 +12,20 @@ export async function generateDescriptionSuggestion(
   return data.content;
 }
 
-export async function generateBoardAnalysis(board: Board) {
+type BoardAnalysis = {
+  status: string;
+  distribution: string;
+  recommendations: string[];
+  statistics: {
+    done: number;
+    in_progress: number;
+    pending: number;
+  };
+};
+
+export async function generateBoardAnalysis(
+  board: Board
+): Promise<BoardAnalysis> {
   const { data } = await request.post("/ai/board-analysis", { board });
   return data;
 }
