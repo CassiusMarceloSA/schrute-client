@@ -12,7 +12,7 @@ const generateMapId = (value: string) => {
 const buildIdentifier = (columns: Column[]) => {
   let stringIdentifier = "";
 
-  for (let key in columns) {
+  for (const key in columns) {
     stringIdentifier += `-${columns[key].id}-${columns[key].tasks.length}`;
   }
 
