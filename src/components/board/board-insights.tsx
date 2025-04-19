@@ -4,6 +4,7 @@ import { useMutation } from "@tanstack/react-query";
 import { Lightbulb } from "lucide-react";
 import { useEffect } from "react";
 import { Skeleton } from "../ui/skeleton";
+import { TaskDistributionChart } from "./task-distribution-chart";
 
 const TextSkeleton = () => {
   return <Skeleton className="bg-neutral-900 h-16 w-full" />;
@@ -19,13 +20,29 @@ const ListSkeleton = () => {
   );
 };
 
+const ChartSkeleton = () => {
+  return (
+    <div className="flex flex-col gap-2">
+      <Skeleton className="bg-neutral-900 h-24 w-full" />
+    </div>
+  );
+};
+
 export const BoardInsights = () => {
   const { board } = useBoardStore();
-  const isValidBoard =
-    board.columns.backlog.tasks.length > 0 ||
-    board.columns.todo.tasks.length > 0 ||
-    board.columns.doing.tasks.length > 0 ||
-    board.columns.done.tasks.length > 0;
+  const {
+    columns: { backlog, todo, doing, done },
+  } = board;
+
+  const totalTasks =
+    backlog.tasks.length +
+    todo.tasks.length +
+    doing.tasks.length +
+    done.tasks.length;
+  const stoppedTasks = backlog.tasks.length + todo.tasks.length;
+  const completedTasks = done.tasks.length;
+  const inProgressTasks = doing.tasks.length;
+  const isValidBoard = totalTasks > 0;
 
   const {
     mutate: generateBoardAnalysisMutation,
@@ -48,40 +65,52 @@ export const BoardInsights = () => {
         Board Insights
       </h3>
       {analysis || isGenerating ? (
-        <div className="flex gap-4 text-sm text-neutral-300">
-          <div className="flex flex-col gap-4 w-1/2">
-            <div className="flex flex-col gap-1">
-              <h4 className="font-semibold">Board Status</h4>
-              {isGenerating ? (
-                <TextSkeleton />
-              ) : (
-                <p className="text-neutral-400">{analysis.status}</p>
-              )}
+        <div className="flex flex-col gap-4">
+          <div className="flex gap-4 text-sm text-neutral-300">
+            <div className="flex flex-col gap-4 w-1/2">
+              <div className="flex flex-col gap-1">
+                <h4 className="font-semibold">Board Status</h4>
+                {isGenerating ? (
+                  <TextSkeleton />
+                ) : (
+                  <p className="text-neutral-400">{analysis.status}</p>
+                )}
+              </div>
+
+              <div className="flex flex-col gap-1">
+                <h4 className="font-semibold">Task Distribution</h4>
+                {isGenerating ? (
+                  <TextSkeleton />
+                ) : (
+                  <p className="text-neutral-400">{analysis.distribution}</p>
+                )}
+
+                {isGenerating ? (
+                  <ChartSkeleton />
+                ) : (
+                  <TaskDistributionChart
+                    stoppedTasks={stoppedTasks}
+                    inProgressTasks={inProgressTasks}
+                    completedTasks={completedTasks}
+                  />
+                )}
+              </div>
             </div>
 
-            <div className="flex flex-col gap-1">
-              <h4 className="font-semibold">Task Distribution</h4>
-              {isGenerating ? (
-                <TextSkeleton />
-              ) : (
-                <p className="text-neutral-400">{analysis.distribution}</p>
-              )}
+            <div className="flex flex-col gap-1 w-1/2">
+              <h4 className="font-semibold">Recommendations</h4>
+              <ul className="list-disc list-inside space-y-1 text-neutral-400">
+                {isGenerating ? (
+                  <ListSkeleton />
+                ) : (
+                  analysis?.recommendations?.map((rec, index) => (
+                    <li className="marker:text-purple-500" key={index}>
+                      {rec}
+                    </li>
+                  ))
+                )}
+              </ul>
             </div>
-          </div>
-
-          <div className="flex flex-col gap-1 w-1/2">
-            <h4 className="font-semibold">Recommendations</h4>
-            <ul className="list-disc list-inside space-y-1 text-neutral-400">
-              {isGenerating ? (
-                <ListSkeleton />
-              ) : (
-                analysis?.recommendations?.map((rec, index) => (
-                  <li className="marker:text-purple-500" key={index}>
-                    {rec}
-                  </li>
-                ))
-              )}
-            </ul>
           </div>
         </div>
       ) : (
