@@ -11,10 +11,10 @@ const TextSkeleton = () => {
 
 const ListSkeleton = () => {
   return (
-    <div className="flex flex-col gap-2">
-      <Skeleton className="bg-neutral-900 h-3 w-full" />
-      <Skeleton className="bg-neutral-900 h-3 w-full" />
-      <Skeleton className="bg-neutral-900 h-3 w-full" />
+    <div className="flex flex-col gap-3">
+      <Skeleton className="bg-neutral-900 h-4 w-full" />
+      <Skeleton className="bg-neutral-900 h-4 w-full" />
+      <Skeleton className="bg-neutral-900 h-4 w-full" />
     </div>
   );
 };
