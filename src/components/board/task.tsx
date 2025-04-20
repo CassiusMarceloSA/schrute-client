@@ -36,6 +36,7 @@ const Card = ({ isDraggable = true, ...props }: Props) => {
           setDragging(true);
         }}
         onDragEnd={() => setDragging(false)}
+        style={{ viewTransitionName: `task-${props.item?.id}` }}
         className={`rounded-sm border overflow-hidden p-3 w-full my-1 ${border} ${bg} ${cursor}`}
         onClick={props.handleClick}
       >

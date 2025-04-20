@@ -3,6 +3,7 @@ import { ColumnEnum, Column as ColumnType, Task as TaskType } from "@/models";
 import { useBoardStore } from "@/store";
 import { TwBackgroundColor, TwBorderColor, Color as TwColor } from "@/utils";
 import { useState } from "react";
+import { flushSync } from "react-dom";
 import { TaskFormModal } from "../task-form";
 import { TaskModal } from "../task-modal";
 import { Skeleton } from "../ui/skeleton";
@@ -66,7 +67,11 @@ const Column = ({
       id: column,
       tasks: cards,
     } satisfies ColumnType;
-    setColumn(column, newColumn);
+    document.startViewTransition(() => {
+      flushSync(() => {
+        setColumn(column, newColumn);
+      });
+    });
   };
 
   const handleDragStart = (e: DragEvent, card: TaskType) => {
