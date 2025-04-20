@@ -7,7 +7,7 @@ const queryClient = new QueryClient();
 
 export default function Home() {
   return (
-    <div className="h-screen w-screen max-w-screen-2xl mx-0 my-auto flex flex-col items-center justify-center font-[family-name:var(--font-geist-sans)]">
+    <div className="h-screen w-screen max-w-screen-2xl mx-0 my-auto flex flex-col items-center justify-center font-[family-name:var(--font-manrope)]">
       <QueryClientProvider client={queryClient}>
         <Header />
         <Board />
