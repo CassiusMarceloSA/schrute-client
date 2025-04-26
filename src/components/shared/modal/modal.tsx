@@ -23,11 +23,7 @@ export function Modal(props: Props) {
   const ButtonContent = props.buttonContent;
   return (
     <Dialog onOpenChange={props.updateOpen} open={props.open}>
-      {ButtonContent && (
-        <DialogTrigger asChild>
-          <Button>{ButtonContent}</Button>
-        </DialogTrigger>
-      )}
+      {ButtonContent && <DialogTrigger asChild>{ButtonContent}</DialogTrigger>}
       <DialogContent className="sm:max-w-md text-neutral-300 bg-neutral-800 border-neutral-700">
         <DialogHeader>
           <DialogTitle className="text-neutral-300">{props.title}</DialogTitle>
