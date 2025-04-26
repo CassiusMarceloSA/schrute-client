@@ -141,7 +141,7 @@ const Column = ({
           onDragOver={handleDragOver}
           onDragLeave={handleDragLeave}
           onDrop={handleDragEnd}
-          className={`h-full w-full overflow-auto scrollbar-hide`}
+          className={`h-full w-full overflow-auto scrollbar-hide max-h-[780px]`}
         >
           {cards.map((card) => (
             <Task

@@ -1,4 +1,3 @@
-import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogClose,
@@ -9,6 +8,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import { cn } from "@/lib/utils";
 
 type Props = {
   children: React.ReactNode;
@@ -17,18 +17,20 @@ type Props = {
   buttonContent?: React.ReactNode;
   open: boolean;
   updateOpen: (open: boolean) => void;
+  className?: string;
 };
 
 export function Modal(props: Props) {
   const ButtonContent = props.buttonContent;
   return (
     <Dialog onOpenChange={props.updateOpen} open={props.open}>
-      {ButtonContent && (
-        <DialogTrigger asChild>
-          <Button>{ButtonContent}</Button>
-        </DialogTrigger>
-      )}
-      <DialogContent className="sm:max-w-md text-neutral-300 bg-neutral-800 border-neutral-700">
+      {ButtonContent && <DialogTrigger asChild>{ButtonContent}</DialogTrigger>}
+      <DialogContent
+        className={cn(
+          "sm:max-w-md text-neutral-300 bg-neutral-800 border-neutral-700",
+          props.className
+        )}
+      >
         <DialogHeader>
           <DialogTitle className="text-neutral-300">{props.title}</DialogTitle>
           <DialogDescription className="text-neutral-400">

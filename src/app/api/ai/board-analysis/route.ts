@@ -82,6 +82,7 @@ export async function POST(req: Request) {
         { role: "system", content: roleDescription },
         { role: "user", content: generatePromptContent(board) },
       ],
+      response_format: { type: "json_object" },
     })
   );
 

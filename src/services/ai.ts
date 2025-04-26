@@ -29,3 +29,13 @@ export async function generateBoardAnalysis(
   const { data } = await request.post("/ai/board-analysis", { board });
   return data;
 }
+
+export async function generateTasksByFile(formData: FormData) {
+  const { data } = await request.post("/ai/generate-tasks-by-file", formData, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+  });
+
+  return data.tasks;
+}
