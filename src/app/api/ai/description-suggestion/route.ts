@@ -31,12 +31,13 @@ export async function POST(req: Request) {
         { role: "system", content: roleDescription },
         { role: "user", content: generatePromptContent(content, title) },
       ],
+      response_format: { type: "json_object" },
     })
   );
-  
+
   if (promptError) {
     return new Response(promptError.message, { status: 500 });
   }
 
   return new Response(response.choices[0].message.content);
-} 
+}
