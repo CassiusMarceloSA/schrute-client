@@ -43,7 +43,7 @@ export const BoardInsights = () => {
 
   return (
     <div className="bg-neutral-800 h-fit rounded-lg p-4 border border-neutral-700 col-span-4">
-      <h3 className="text-lg font-semibold flex items-center gap-2 mb-4">
+      <h3 className="text-lg font-bold flex items-center gap-2 mb-4">
         <Lightbulb size={20} />
         Board Insights
       </h3>
@@ -51,7 +51,7 @@ export const BoardInsights = () => {
         <div className="flex gap-4 text-sm text-neutral-300">
           <div className="flex flex-col gap-4 w-1/2">
             <div className="flex flex-col gap-1">
-              <h4 className="font-semibold">Board Status</h4>
+              <h4 className="font-bold">Board Status</h4>
               {isGenerating ? (
                 <TextSkeleton />
               ) : (
@@ -60,7 +60,7 @@ export const BoardInsights = () => {
             </div>
 
             <div className="flex flex-col gap-1">
-              <h4 className="font-semibold">Task Distribution</h4>
+              <h4 className="font-bold">Task Distribution</h4>
               {isGenerating ? (
                 <TextSkeleton />
               ) : (
