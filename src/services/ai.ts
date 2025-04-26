@@ -36,5 +36,6 @@ export async function generateTasksByFile(formData: FormData) {
       "Content-Type": "multipart/form-data",
     },
   });
-  return data;
+
+  return data.tasks;
 }
