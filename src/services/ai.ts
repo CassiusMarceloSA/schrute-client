@@ -30,8 +30,8 @@ export async function generateBoardAnalysis(
   return data;
 }
 
-export async function generateTasksFile(formData: FormData) {
-  const { data } = await request.post("/ai/generate-tasks-file", formData, {
+export async function generateTasksByFile(formData: FormData) {
+  const { data } = await request.post("/ai/generate-tasks-by-file", formData, {
     headers: {
       "Content-Type": "multipart/form-data",
     },
