@@ -26,7 +26,7 @@ const ImportFileModal = () => {
         status: "backlog",
         duration: 30,
         id: index.toString(),
-      })) as any;
+      })) as Task[];
       setTasks(tasks);
       setSelectedTasks(tasks);
       setFile(null);

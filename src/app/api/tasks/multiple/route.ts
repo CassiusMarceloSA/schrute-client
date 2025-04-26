@@ -4,6 +4,8 @@ import { databases } from "@/lib/appwrite";
 import { toResult } from "@/utils";
 import { NextRequest } from "next/server";
 import { validateCreateTask } from "../validators";
+import { Task } from "@/models";
+import { Models } from "appwrite";
 
 const databaseId = process.env.APPWRITE_DATABASE_ID || "";
 const collectionId = process.env.APPWRITE_COLLECTION_ID || "";
@@ -18,7 +20,7 @@ export async function POST(req: NextRequest) {
     }
   }
 
-  const documents = body.map((task: any) => ({
+  const documents = body.map((task: Task) => ({
     documentId: "unique()",
     data: {
       title: task.title,
@@ -30,7 +32,7 @@ export async function POST(req: NextRequest) {
 
   const [creationError, document] = await toResult(
     Promise.all(
-      documents.map((document: any) =>
+      documents.map((document: Models.Document) =>
         databases.createDocument(
           databaseId,
           collectionId,

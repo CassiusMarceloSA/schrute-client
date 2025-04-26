@@ -16,7 +16,7 @@ export async function POST(req: Request) {
   }
 
   let text = "";
-  const buffer = (await file.arrayBuffer()) as any;
+  const buffer = await file.arrayBuffer();
 
   if (
     file.type ===
