@@ -5,13 +5,18 @@ A modern task management application built with Next.js, featuring AI integratio
 ## Features
 
 - Task management with drag-and-drop functionality
-- AI-powered task assistance
+- AI-powered task assistance and suggestions
 - Telegram integration for notifications
 - Modern UI with Tailwind CSS and shadcn/ui components
 - Type-safe development with TypeScript
 - State management with Zustand
 - Form handling with React Hook Form and Zod validation
 - API integration with Appwrite
+- Custom hooks for reusable logic
+- Utility functions for common operations
+- Data models for type-safe data handling
+- Service layer for external integrations
+- AI-powered PRD document processing (.docx) for automated task creation
 
 ## Tech Stack
 
@@ -25,6 +30,8 @@ A modern task management application built with Next.js, featuring AI integratio
 - **AI Integration**: OpenAI
 - **Messaging**: Telegram
 - **Data Fetching**: TanStack Query
+- **Routing**: Next.js App Router
+- **Development Tools**: ESLint, TypeScript
 
 ## Getting Started
 
@@ -51,6 +58,7 @@ TELEGRAM_BOT_TOKEN=your_telegram_bot_token
 OPENAI_API_KEY=your_openai_api_key
 APPWRITE_ENDPOINT=your_appwrite_endpoint
 APPWRITE_PROJECT_ID=your_project_id
+NEXT_PUBLIC_APP_URL=your_app_url
 ```
 
 ### Installation
@@ -87,11 +95,15 @@ npm run dev
 src/
 ├── app/              # Next.js app router pages
 ├── components/       # Reusable UI components
-├── services/         # API and external service integrations
-│   ├── ai/          # OpenAI integration
-│   ├── task/        # Task management
-│   └── telegram/    # Telegram bot integration
-└── types/           # TypeScript type definitions
+├── hooks/           # Custom React hooks
+├── lib/             # Library configurations and utilities
+├── models/          # Data models and type definitions
+├── services/        # API and external service integrations
+│   ├── ai/         # OpenAI integration
+│   ├── task/       # Task management
+│   └── telegram/   # Telegram bot integration
+├── store/           # Zustand state management
+└── utils/           # Utility functions and helpers
 ```
 
 ## Contributing
