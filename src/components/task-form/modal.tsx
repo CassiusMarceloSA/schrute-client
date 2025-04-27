@@ -47,10 +47,10 @@ export function TaskFormModal(props: Props) {
       open={open}
       updateOpen={setOpen}
       buttonContent={
-        <>
+        <Button>
           <Plus size={12} />
           Add new task
-        </>
+        </Button>
       }
       title="Task form"
       description="Include data to add new task"

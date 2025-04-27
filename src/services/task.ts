@@ -25,6 +25,11 @@ export async function createTask(payload: CreateTaskPayload) {
   return data;
 }
 
+export async function createMultipleTasks(payload: CreateTaskPayload[]) {
+  const { data } = await request.post("/tasks/multiple", payload);
+  return data;
+}
+
 export async function updateTask() {}
 export async function deleteTask(id: string) {
   const { data } = await request.delete(`/tasks/${id}`);

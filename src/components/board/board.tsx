@@ -8,6 +8,7 @@ import { Column } from ".";
 import { CreateTaskPayload } from "@/app/api/tasks/models";
 import { useFetchTasks } from "@/hooks";
 import { BoardInsights } from "./board-insights";
+import { ImportFileModal } from "../import-file";
 
 const Board = () => {
   const { board, setColumn, setBoard } = useBoardStore();
@@ -41,7 +42,10 @@ const Board = () => {
     <div className="h-full overflow-hidden text-neutral-200 rounded-lg">
       {isRefetching && <Loader />}
       <div className="grid grid-cols-12 gap-4 h-full py-8">
-        <BoardInsights />
+        <div className="col-span-4 flex flex-col gap-4">
+          <BoardInsights />
+          <ImportFileModal />
+        </div>
         <div className="flex justify-between col-span-8 h-full w-full gap-3">
           {columns.map((item, index) => (
             <Column

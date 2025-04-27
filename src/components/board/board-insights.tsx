@@ -42,7 +42,7 @@ export const BoardInsights = () => {
   }, [isValidBoard, analysis, generateBoardAnalysisMutation]);
 
   return (
-    <div className="bg-neutral-800 h-fit rounded-lg p-4 border border-neutral-700 col-span-4">
+    <div className="bg-neutral-800 h-fit rounded-lg p-4 border border-neutral-700">
       <h3 className="text-lg font-bold flex items-center gap-2 mb-4">
         <Lightbulb size={20} />
         Board Insights
@@ -86,7 +86,16 @@ export const BoardInsights = () => {
         </div>
       ) : (
         <div className="text-neutral-400 w-full text-center">
-          No insights available
+          {isValidBoard ? (
+            <p>No insights available</p>
+          ) : (
+            <p>
+              Add tasks to the board to generate insights.
+              <br />
+              You can add tasks by clicking the Add button in each column or
+              importing a docx file.
+            </p>
+          )}
         </div>
       )}
     </div>

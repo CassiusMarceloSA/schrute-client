@@ -16,7 +16,7 @@ export async function POST(req: Request) {
   }
 
   let text = "";
-  const buffer = (await file.arrayBuffer()) as any;
+  const buffer = await file.arrayBuffer();
 
   if (
     file.type ===
@@ -45,7 +45,7 @@ export async function POST(req: Request) {
           Here is the content of the document (${file.name}):
           \n\n${text}.\n 
           The response should be in JSON format. 
-          The JSON should be a list of tasks. Each task should have the following fields: task, description, tags, priority, phase. 
+          The JSON should be a list of tasks. Each task should have the following fields: title, description, tags, priority, phase. 
           `,
         },
       ],
@@ -58,5 +58,5 @@ export async function POST(req: Request) {
   }
 
   const json = JSON.parse(response.choices[0].message.content || "");
-  return NextResponse.json({ response: json });
+  return NextResponse.json({ tasks: json.tasks });
 }
